@@ -2,16 +2,16 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const passport = require('passport');
-const session = require('express-session');
+// const passport = require('passport');
+// const session = require('express-session');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
 
 
 // Load Routes
 const usersRouter = require('./routes/users');
 const pollsRouter = require('./routes/polls');
-const authRouter = require('./routes/auth');
+// const authRouter = require('./routes/auth');
 
 // Initialize Express App
 const app = express();
@@ -28,19 +28,19 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret: '0g93j@ll//asdfo$%!~#&*aU,xjk)(',
-  resave: true,
-  saveUninitialized: true,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(session({
+//   secret: '0g93j@ll//asdfo$%!~#&*aU,xjk)(',
+//   resave: true,
+//   saveUninitialized: true,
+//   store: new MongoStore({ mongooseConnection: mongoose.connection })
+// }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Use Routes
 app.use('/api/users', usersRouter);
 app.use('/api/polls', pollsRouter);
-app.use('/auth', authRouter);
+// app.use('/auth', authRouter);
 
 app.get('/', function(req, res) {
   let html = `<ul>\

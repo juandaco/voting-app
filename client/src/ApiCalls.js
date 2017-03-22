@@ -17,8 +17,16 @@ function getPoll(id) {
 }
 
 function voteFor(option, id) {
-
-
+  const request = new Request(`http://localhost:3001/api/polls/${id}`, {
+    method: 'PUT',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      name: option
+    })
+  });
+  return fetch(request).then(checkStatus).then(parseJSON);
 }
 
 function checkStatus(response) {
@@ -37,6 +45,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll };
+const ApiCalls = { getPolls, getPoll, voteFor };
 
 export default ApiCalls;

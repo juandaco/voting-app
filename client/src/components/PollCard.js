@@ -9,27 +9,20 @@ import {
   MenuItem
 } from 'react-mdl';
 import { Doughnut } from 'react-chartjs-2';
-import ApiCalls from'../ApiCalls';
+import ApiCalls from '../ApiCalls';
 
 class PollCard extends Component {
   constructor(props) {
     super(props);
 
-    let labels = this.props.pollData.options.map(option => {
-      return option.name;
-    });
-    let votes = this.props.pollData.options.map(option => {
-      return option.votes;
-    });
-
     this.state = {
       id: this.props.pollData.id,
       chosen: '',
       data: {
-        labels,
+        labels: [],
         datasets: [
           {
-            data: votes,
+            data: [],
             backgroundColor: [
               '#FF6384',
               '#36A2EB',
@@ -58,7 +51,19 @@ class PollCard extends Component {
   }
 
   componentDidMount() {
+    console.log('Mounted');
+    let labels = this.props.pollData.options.map(option => {
+      return option.name;
+    });
+    let votes = this.props.pollData.options.map(option => {
+      return option.votes;
+    });
+    let dataState = this.state.data;
+    dataState.labels = labels;
+    dataState.datasets[0].data = votes;
+
     this.setState({
+      data: dataState,
       chosen: this.state.data.labels[0]
     });
   }
@@ -70,16 +75,27 @@ class PollCard extends Component {
   }
 
   userVote() {
-        // Validate if user already voted
-    // if (!this.state.userVoted) {
-    ApiCalls.getPoll(this.state.id).then(poll => console.log(poll));
+    let dataState = this.state.data;
+    let index = dataState.labels.indexOf(this.state.chosen);
+    dataState.datasets[0].data[index]++;
 
-    this.props.userVoteDialog(this.state.chosen);
+    ApiCalls.voteFor(this.state.chosen, this.state.id)
+      .then(results => {
+        this.props.userVoteDialog(this.state.chosen);
+        this.setState({
+          data: dataState
+        });
+      })
+      .catch(err => {
+        // this.props.confirmationDialog(
+        //   'There was an error with your vote, please try again'
+        // );
+      });
   }
 
   render() {
     let menuItems = this.state.data.labels
-      .filter(option=> {
+      .filter(option => {
         return option !== this.state.chosen;
       })
       .map((option, i) => {
@@ -128,7 +144,12 @@ class PollCard extends Component {
               {this.state.chosen}
               <Icon name="arrow_drop_up" />
             </Button>
-            <Menu target={`vote-menu${this.state.id}`} valign="top" align="left" ripple>
+            <Menu
+              target={`vote-menu${this.state.id}`}
+              valign="top"
+              align="left"
+              ripple
+            >
               {menuItems}
             </Menu>
           </div>

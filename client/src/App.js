@@ -17,7 +17,7 @@ class App extends Component {
       openDialog: false,
       dialogType: 'confirm',
       confirmationText: '',
-      isUserAuth: false,
+      isUserAuth: true,
       pollData: []
     };
 
@@ -132,7 +132,7 @@ class App extends Component {
     // }
   }
 
-  createOption() {
+  createOption(e) {
     // API call for creating user option
     console.log('Creating Option');
   }

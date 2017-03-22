@@ -9,6 +9,7 @@ import {
   MenuItem
 } from 'react-mdl';
 import { Doughnut } from 'react-chartjs-2';
+import ApiCalls from'../ApiCalls';
 
 class PollCard extends Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class PollCard extends Component {
     };
     // Function Bindings
     this.handleClick = this.handleClick.bind(this);
+    this.userVote = this.userVote.bind(this);
   }
 
   componentDidMount() {
@@ -61,21 +63,29 @@ class PollCard extends Component {
     });
   }
 
-  handleClick(color) {
+  handleClick(option) {
     this.setState({
-      chosen: color
+      chosen: option
     });
+  }
+
+  userVote() {
+        // Validate if user already voted
+    // if (!this.state.userVoted) {
+    ApiCalls.getPoll(this.state.id).then(poll => console.log(poll));
+
+    this.props.userVoteDialog(this.state.chosen);
   }
 
   render() {
     let menuItems = this.state.data.labels
-      .filter(color => {
-        return color !== this.state.chosen;
+      .filter(option=> {
+        return option !== this.state.chosen;
       })
-      .map((color, i) => {
+      .map((option, i) => {
         return (
-          <MenuItem key={i} onClick={() => this.handleClick(color)}>
-            {color}
+          <MenuItem key={i} onClick={() => this.handleClick(option)}>
+            {option}
           </MenuItem>
         );
       });
@@ -114,17 +124,17 @@ class PollCard extends Component {
               float: 'left'
             }}
           >
-            <Button id="vote-menu">
+            <Button id={`vote-menu${this.state.id}`}>
               {this.state.chosen}
               <Icon name="arrow_drop_up" />
             </Button>
-            <Menu target="vote-menu" valign="top" align="left" ripple>
+            <Menu target={`vote-menu${this.state.id}`} valign="top" align="left" ripple>
               {menuItems}
             </Menu>
           </div>
           <Button
             colored
-            onClick={this.props.userVote}
+            onClick={this.userVote}
             style={{ display: 'inline-block', float: 'right' }}
           >
             Vote{' '}

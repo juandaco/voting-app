@@ -30,7 +30,7 @@ class App extends Component {
     this.newOptionDialog = this.newOptionDialog.bind(this);
     this.pollDialog = this.pollDialog.bind(this);
     this.createPoll = this.createPoll.bind(this);
-    this.userVote = this.userVote.bind(this);
+    this.userVoteDialog= this.userVoteDialog.bind(this);
     this.showDashboard = this.showDashboard.bind(this);
     this.getPolls = this.getPolls.bind(this);
   }
@@ -123,12 +123,10 @@ class App extends Component {
     console.log('Creating Poll');
   }
 
-  userVote() {
-    // Validate if user already voted
-    // if (!this.state.userVoted) {
+  userVoteDialog(option) {
+
     // API call to store the user vote
-    console.log('Voting');
-    this.confirmationDialog('You voted for Red');
+    this.confirmationDialog(`You voted for ${option}`);
     // } else {
     //   this.confirmationDialog('You already voted in this poll');
     // }
@@ -160,7 +158,7 @@ class App extends Component {
       return (
         <PollCard
           key={index}
-          userVote={this.userVote}
+          userVoteDialog={this.userVoteDialog}
           newOptionDialog={this.newOptionDialog}
           pollData={pollData}
         />

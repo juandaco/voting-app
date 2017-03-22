@@ -16,6 +16,11 @@ function getPoll(id) {
     .then(parseJSON);
 }
 
+function voteFor(option, id) {
+
+
+}
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;

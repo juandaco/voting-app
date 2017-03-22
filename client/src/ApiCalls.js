@@ -1,13 +1,19 @@
 /* eslint-disable no-undef */
-function search(query, cb) {
-  /*
-    The API routes within the server needs to be defined 
-  */
-  return fetch(`api/movies?q=${query}`, {
-    accept: 'application/json',
-  }).then(checkStatus)
-    .then(parseJSON)
-    .then(cb);
+
+function getPolls() {
+  return fetch(`http://localhost:3001/api/polls`, {
+    accept: 'application/json'
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
+function getPoll(id) {
+  return fetch(`http://localhost:3001/api/polls/${id}`, {
+    accept: 'application/json'
+  })
+    .then(checkStatus)
+    .then(parseJSON);
 }
 
 function checkStatus(response) {
@@ -26,5 +32,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { search };
+const ApiCalls = { getPolls, getPoll };
+
 export default ApiCalls;

@@ -6,20 +6,29 @@ import {
   Button,
   Icon,
   Menu,
-  MenuItem,
+  MenuItem
 } from 'react-mdl';
 import { Doughnut } from 'react-chartjs-2';
 
 class PollCard extends Component {
   constructor(props) {
     super(props);
+
+    let labels = this.props.pollData.options.map(option => {
+      return option.name;
+    });
+    let votes = this.props.pollData.options.map(option => {
+      return option.votes;
+    });
+
     this.state = {
+      id: this.props.pollData.id,
       chosen: '',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Orange', 'Purple', 'Grey'],
+        labels,
         datasets: [
           {
-            data: [300, 50, 100, 30, 90, 20, 60],
+            data: votes,
             backgroundColor: [
               '#FF6384',
               '#36A2EB',
@@ -27,7 +36,7 @@ class PollCard extends Component {
               '#1ABC9C',
               '#EB984E',
               '#AF7AC5',
-              '#CACFD2',
+              '#CACFD2'
             ],
             hoverBackgroundColor: [
               '#FF6384',
@@ -36,11 +45,11 @@ class PollCard extends Component {
               '#1ABC9C',
               '#EB984E',
               '#AF7AC5',
-              '#CACFD2',
-            ],
-          },
-        ],
-      },
+              '#CACFD2'
+            ]
+          }
+        ]
+      }
     };
     // Function Bindings
     this.handleClick = this.handleClick.bind(this);
@@ -48,13 +57,13 @@ class PollCard extends Component {
 
   componentDidMount() {
     this.setState({
-      chosen: this.state.data.labels[0],
+      chosen: this.state.data.labels[0]
     });
   }
 
   handleClick(color) {
     this.setState({
-      chosen: color,
+      chosen: color
     });
   }
 
@@ -77,22 +86,22 @@ class PollCard extends Component {
         style={{
           width: 310,
           margin: 'auto',
-          marginTop: 20,
+          marginTop: 20
         }}
       >
         <CardTitle
           expand
           style={{
-            color: '#000',
+            color: '#000'
           }}
         >
           <div>
-            <h4>Colors</h4>
+            <h4>{this.props.pollData.pollTitle}</h4>
             <Doughnut
               data={this.state.data}
               height={310}
               options={{
-                maintainAspectRatio: true,
+                maintainAspectRatio: true
               }}
             />
           </div>
@@ -102,7 +111,7 @@ class PollCard extends Component {
             style={{
               position: 'relative',
               display: 'inline-block',
-              float: 'left',
+              float: 'left'
             }}
           >
             <Button id="vote-menu">

@@ -5,6 +5,7 @@ import MyHeader from './components/MyHeader';
 import MyDrawer from './components/MyDrawer';
 import PollCard from './components/PollCard';
 import PopUpDialog from './components/PopUpDialog';
+import ApiCalls from './ApiCalls';
 
 class App extends Component {
   constructor() {
@@ -16,7 +17,8 @@ class App extends Component {
       openDialog: false,
       dialogType: 'confirm',
       confirmationText: '',
-      isUserAuth: true,
+      isUserAuth: false,
+      pollData: []
     };
 
     // Method Bindings
@@ -30,24 +32,37 @@ class App extends Component {
     this.createPoll = this.createPoll.bind(this);
     this.userVote = this.userVote.bind(this);
     this.showDashboard = this.showDashboard.bind(this);
+    this.getPolls = this.getPolls.bind(this);
+  }
+
+  componentDidMount() {
+    this.getPolls();
+  }
+
+  getPolls() {
+    ApiCalls.getPolls().then(polls => {
+      this.setState({
+        pollData: polls
+      });
+    });
   }
 
   showDialog() {
     this.setState({
-      openDialog: true,
+      openDialog: true
     });
   }
 
   hideDialog() {
     this.setState({
-      openDialog: false,
+      openDialog: false
     });
   }
 
   confirmationDialog(text) {
     this.setState({
       dialogType: 'confirm',
-      confirmationText: text,
+      confirmationText: text
     });
     this.showDialog();
   }
@@ -55,10 +70,11 @@ class App extends Component {
   loginFirstDialog() {
     this.confirmationDialog('You need to login first.');
   }
+
   newOptionDialog() {
     if (this.state.isUserAuth) {
       this.setState({
-        dialogType: 'newOption',
+        dialogType: 'newOption'
       });
       this.showDialog();
     } else {
@@ -69,7 +85,7 @@ class App extends Component {
   pollDialog() {
     if (this.state.isUserAuth) {
       this.setState({
-        dialogType: 'poll',
+        dialogType: 'poll'
       });
       this.showDialog();
     } else {
@@ -80,7 +96,7 @@ class App extends Component {
   handleSearchChange(e) {
     const value = e.target.value;
     this.setState({
-      searchValue: value,
+      searchValue: value
     });
   }
 
@@ -134,6 +150,23 @@ class App extends Component {
   }
 
   render() {
+    let pollCards;
+    pollCards = this.state.pollData.map((poll, index) => {
+      let pollData = {
+        id: poll._id,
+        pollTitle: poll.title,
+        options: poll.options
+      };
+      return (
+        <PollCard
+          key={index}
+          userVote={this.userVote}
+          newOptionDialog={this.newOptionDialog}
+          pollData={pollData}
+        />
+      );
+    });
+
     return (
       <div style={{ height: '100vh', position: 'relative' }}>
         <Layout fixedHeader fixedDrawer>
@@ -144,10 +177,7 @@ class App extends Component {
           />
           <MyDrawer showDashboard={this.showDashboard} />
           <Content style={{ flex: 1, height: 100 }}>
-            <PollCard
-              userVote={this.userVote}
-              newOptionDialog={this.newOptionDialog}
-            />
+            {pollCards}
             <FABButton
               colored
               style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}

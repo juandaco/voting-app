@@ -29,6 +29,24 @@ function voteFor(option, id) {
   return fetch(request).then(checkStatus).then(parseJSON);
 }
 
+function newPoll(poll) {
+  poll.options = poll.options.split(/\n/).map(option => {
+    return {
+      name: option,
+      votes: 0
+    }
+  })
+
+  const request = new Request(`http://localhost:3001/api/polls/`, {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify(poll)
+  });
+  return fetch(request).then(checkStatus).then(parseJSON);
+}
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -45,6 +63,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll, voteFor };
+const ApiCalls = { getPolls, getPoll, voteFor, newPoll };
 
 export default ApiCalls;

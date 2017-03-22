@@ -2,10 +2,10 @@ const express = require('express');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-// const passport = require('passport');
-// const session = require('express-session');
+const passport = require('passport');
+const session = require('express-session');
 const mongoose = require('mongoose');
-// const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 
 
 // Load Routes
@@ -28,33 +28,33 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(session({
-//   secret: '0g93j@ll//asdfo$%!~#&*aU,xjk)(',
-//   resave: true,
-//   saveUninitialized: true,
-//   store: new MongoStore({ mongooseConnection: mongoose.connection })
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(session({
+  secret: '0g93j@ll//asdfo$%!~#&*aU,xjk)(',
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Use Routes
 app.use('/api/users', usersRouter);
 app.use('/api/polls', pollsRouter);
 // app.use('/auth', authRouter);
 
-app.get('/', function(req, res) {
-  let html = `<ul>\
-      <li><a href='/auth/github'>GitHub</a></li>\
-      <li><a href='/logout'>logout</a></li>\
-    </ul>`;
+// app.get('/', function(req, res) {
+//   let html = `<ul>\
+//       <li><a href='/auth/github'>GitHub</a></li>\
+//       <li><a href='/logout'>logout</a></li>\
+//     </ul>`;
 
-  if (req.isAuthenticated()) {
-    html += '<p>authenticated as user:</p>';
-    html += '<pre>' + JSON.stringify(req.user, null, 4) + '</pre>';
-  }
+//   if (req.isAuthenticated()) {
+//     html += '<p>authenticated as user:</p>';
+//     html += '<pre>' + JSON.stringify(req.user, null, 4) + '</pre>';
+//   }
 
-  res.send(html);
-});
+//   res.send(html);
+// });
 
 app.get('/logout', function(req, res) {
   console.log('logging out');

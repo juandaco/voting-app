@@ -1,11 +1,11 @@
 import React from 'react';
 import { Drawer, Navigation, Icon } from 'react-mdl';
 
-const myDrawer = ({ showDashboard }) => {
+const MyDrawer = ({ showDashboard, loginUser }) => {
   return (
     <Drawer title="Pollster App">
       <Navigation>
-        <a href="#">
+        <a href="#" onClick={loginUser}>
           <Icon name="account_circle" />
           <span className="drawer-link">Login</span>
         </a>
@@ -27,4 +27,4 @@ const myDrawer = ({ showDashboard }) => {
   );
 };
 
-export default myDrawer;
+export default MyDrawer;

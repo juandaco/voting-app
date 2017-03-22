@@ -34,6 +34,7 @@ class App extends Component {
     this.showDashboard = this.showDashboard.bind(this);
     this.getPolls = this.getPolls.bind(this);
     this.createOption = this.createOption.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
 
   componentDidMount() {
@@ -119,9 +120,12 @@ class App extends Component {
     // Search DataBase for Polls
   }
 
-  createPoll(e) {
-    // API call with the query Items
-    console.log('Creating Poll');
+  createPoll(poll) {
+    this.hideDialog();
+    ApiCalls.newPoll(poll).then(result => {
+      this.getPolls();
+      this.confirmationDialog('Poll Created');
+    });
   }
 
   userVoteDialog(option) {
@@ -143,6 +147,10 @@ class App extends Component {
     } else {
       this.loginFirstDialog();
     }
+  }
+
+  loginUser() {
+    console.log('Login User');
   }
 
   render() {
@@ -171,7 +179,7 @@ class App extends Component {
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
           />
-          <MyDrawer showDashboard={this.showDashboard} />
+          <MyDrawer showDashboard={this.showDashboard} loginUser={this.loginUser} />
           <Content style={{ flex: 1, height: 100 }}>
             {pollCards}
             <FABButton

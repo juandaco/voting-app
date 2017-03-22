@@ -21,7 +21,10 @@ class PopUpDialog extends Component {
 
     // Function Bindings
     this.handleNewOptionChange = this.handleNewOptionChange.bind(this);
+    this.handlePollTitleChange = this.handlePollTitleChange.bind(this);
+    this.handlePollOptionsChange = this.handlePollOptionsChange.bind(this);
     this.addNewOption = this.addNewOption.bind(this);
+    this.addNewPoll = this.addNewPoll.bind(this);
   }
 
   handleNewOptionChange(e) {
@@ -30,8 +33,30 @@ class PopUpDialog extends Component {
     });
   }
 
+  handlePollTitleChange(e) {
+    let newPoll = this.state.newPoll;
+    newPoll.title = e.target.value;
+
+    this.setState({
+      newPoll
+    });
+  }
+
+  handlePollOptionsChange(e) {
+    let newPoll = this.state.newPoll;
+    newPoll.options = e.target.value;
+
+    this.setState({
+      newPoll
+    });
+  }
+
   addNewOption() {
     this.props.createOption(this.state.newOption);
+  }
+
+  addNewPoll() {
+    this.props.createPoll(this.state.newPoll);
   }
 
   render() {
@@ -39,7 +64,6 @@ class PopUpDialog extends Component {
     const cancel = this.props.cancel;
     const type = this.props.type;
     const confirmationText = this.props.confirmationText;
-    const createPoll = this.props.createPoll;
     // For registering the dialogs
     const dialogs = document.querySelector('dialog');
     dialogs && dialogPolyfill.registerDialog(dialogs);
@@ -60,12 +84,12 @@ class PopUpDialog extends Component {
         content = (
           <div>
             <Textfield
-              onChange={() => {}}
+              onChange={this.handlePollTitleChange}
               label="Title"
               style={{ width: '150px' }}
             />
             <Textfield
-              onChange={() => {}}
+              onChange={this.handlePollOptionsChange}
               label="Options (separated by Lines)"
               rows={3}
               style={{ width: '250px' }}
@@ -77,7 +101,7 @@ class PopUpDialog extends Component {
             <Button type="button" onClick={cancel}>
               Cancel
             </Button>
-            <Button type="button" onClick={createPoll}>
+            <Button type="button" onClick={this.addNewPoll}>
               Create
             </Button>
           </div>

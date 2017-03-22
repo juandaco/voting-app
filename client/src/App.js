@@ -13,10 +13,10 @@ class App extends Component {
     this.state = {
       searchValue: '',
       searchFocus: false,
-      movie: '',
       openDialog: false,
       dialogType: 'confirm',
       confirmationText: '',
+      currentPollID: '',
       isUserAuth: true,
       pollData: []
     };
@@ -30,9 +30,10 @@ class App extends Component {
     this.newOptionDialog = this.newOptionDialog.bind(this);
     this.pollDialog = this.pollDialog.bind(this);
     this.createPoll = this.createPoll.bind(this);
-    this.userVoteDialog= this.userVoteDialog.bind(this);
+    this.userVoteDialog = this.userVoteDialog.bind(this);
     this.showDashboard = this.showDashboard.bind(this);
     this.getPolls = this.getPolls.bind(this);
+    this.createOption = this.createOption.bind(this);
   }
 
   componentDidMount() {
@@ -71,7 +72,10 @@ class App extends Component {
     this.confirmationDialog('You need to login first.');
   }
 
-  newOptionDialog() {
+  newOptionDialog(id) {
+    this.setState({
+      currentPollID: id
+    });
     if (this.state.isUserAuth) {
       this.setState({
         dialogType: 'newOption'
@@ -99,13 +103,11 @@ class App extends Component {
       searchValue: value
     });
   }
-
   handleSearchKeys(e) {
     const textInput = document.getElementById('textfield-Search');
     if (e.keyCode === 27) {
       // Erase Search Text
       this.setState({ searchValue: '' });
-      // Remove focus from the input
       textInput.blur();
     } else if (e.keyCode === 13) {
       // Perform search
@@ -113,28 +115,24 @@ class App extends Component {
       textInput.blur();
     }
   }
-
   searchPolls() {
     // Search DataBase for Polls
   }
 
-  createPoll() {
+  createPoll(e) {
     // API call with the query Items
     console.log('Creating Poll');
   }
 
   userVoteDialog(option) {
-
-    // API call to store the user vote
     this.confirmationDialog(`You voted for ${option}`);
-    // } else {
-    //   this.confirmationDialog('You already voted in this poll');
-    // }
   }
 
-  createOption(e) {
-    // API call for creating user option
-    console.log('Creating Option');
+  createOption(option) {
+    this.hideDialog();
+    ApiCalls.voteFor(option, this.state.currentPollID).then(result => {
+      this.getPolls();
+    });
   }
 
   showDashboard() {
@@ -192,6 +190,7 @@ class App extends Component {
           confirmationText={this.state.confirmationText}
           createPoll={this.createPoll}
           createOption={this.createOption}
+          currentPollID={this.state.currentPollID}
         />
       </div>
     );

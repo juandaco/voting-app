@@ -48,10 +48,10 @@ class PollCard extends Component {
     // Function Bindings
     this.handleClick = this.handleClick.bind(this);
     this.userVote = this.userVote.bind(this);
+    this.newOptionHandler = this.newOptionHandler.bind(this);
   }
 
   componentDidMount() {
-    console.log('Mounted');
     let labels = this.props.pollData.options.map(option => {
       return option.name;
     });
@@ -93,6 +93,11 @@ class PollCard extends Component {
       });
   }
 
+  newOptionHandler() {
+    let id = this.state.id;
+    this.props.newOptionDialog(id);
+  }
+
   render() {
     let menuItems = this.state.data.labels
       .filter(option => {
@@ -126,6 +131,7 @@ class PollCard extends Component {
             <Doughnut
               data={this.state.data}
               height={310}
+              redraw
               options={{
                 maintainAspectRatio: true
               }}
@@ -162,7 +168,7 @@ class PollCard extends Component {
           </Button>
           <Button
             colored
-            onClick={this.props.newOptionDialog}
+            onClick={this.newOptionHandler}
             style={{ display: 'inline-block', float: 'right' }}
           >
             New Option

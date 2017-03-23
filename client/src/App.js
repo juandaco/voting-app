@@ -17,7 +17,7 @@ class App extends Component {
       dialogType: 'confirm',
       confirmationText: '',
       currentPollID: '',
-      isUserAuth: true,
+      isUserAuth: false,
       pollData: []
     };
 
@@ -151,6 +151,9 @@ class App extends Component {
 
   loginUser() {
     console.log('Login User');
+    ApiCalls.loginUser()
+      .then(resp => console.log(resp))
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -179,12 +182,15 @@ class App extends Component {
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
           />
-          <MyDrawer showDashboard={this.showDashboard} loginUser={this.loginUser} />
+          <MyDrawer
+            showDashboard={this.showDashboard}
+            loginUser={this.loginUser}
+          />
           <Content style={{ flex: 1, height: 100 }}>
             {pollCards}
             <FABButton
               colored
-              style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
+              style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1 }}
               onClick={this.pollDialog}
             >
               <Icon name="add" />

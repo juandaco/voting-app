@@ -111,6 +111,11 @@ class PollCard extends Component {
         );
       });
 
+    let chosen = this.state.chosen;
+    if (chosen.length > 9) {
+      chosen = chosen.substr(0, 9) + '...';
+    }
+
     return (
       <Card
         shadow={0}
@@ -146,9 +151,15 @@ class PollCard extends Component {
               float: 'left'
             }}
           >
-            <Button id={`vote-menu${this.state.id}`}>
-              {this.state.chosen}
-              <Icon name="arrow_drop_up" />
+            <Button
+              id={`vote-menu${this.state.id}`}
+              style={{ width: 130, fontSize: 12 }}
+            >
+              {chosen}
+              <Icon
+                name="arrow_drop_up"
+                style={{ float: 'right', marginRight: 0, marginTop: 7 }}
+              />
             </Button>
             <Menu
               target={`vote-menu${this.state.id}`}
@@ -162,14 +173,24 @@ class PollCard extends Component {
           <Button
             colored
             onClick={this.userVote}
-            style={{ display: 'inline-block', float: 'right' }}
+            style={{
+              display: 'inline-block',
+              float: 'right',
+              width: 40,
+              padding: 0
+            }}
           >
             Vote{' '}
           </Button>
           <Button
             colored
             onClick={this.newOptionHandler}
-            style={{ display: 'inline-block', float: 'right' }}
+            style={{
+              display: 'inline-block',
+              float: 'right',
+              width: 100,
+              padding: 0
+            }}
           >
             New Option
           </Button>

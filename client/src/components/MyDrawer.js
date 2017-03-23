@@ -5,7 +5,7 @@ const MyDrawer = ({ showDashboard, loginUser }) => {
   return (
     <Drawer title="Pollster App">
       <Navigation>
-        <a href="#" onClick={loginUser}>
+        <a href="http://localhost:3001/auth/github" target="_blank" onClick={loginUser}>
           <Icon name="account_circle" />
           <span className="drawer-link">Login</span>
         </a>

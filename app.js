@@ -7,11 +7,10 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
-
 // Load Routes
 const usersRouter = require('./routes/users');
 const pollsRouter = require('./routes/polls');
-// const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth');
 
 // Initialize Express App
 const app = express();
@@ -40,7 +39,7 @@ app.use(passport.session());
 // Use Routes
 app.use('/api/users', usersRouter);
 app.use('/api/polls', pollsRouter);
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
 
 // app.get('/', function(req, res) {
 //   let html = `<ul>\

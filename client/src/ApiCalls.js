@@ -34,8 +34,8 @@ function newPoll(poll) {
     return {
       name: option,
       votes: 0
-    }
-  })
+    };
+  });
 
   const request = new Request(`http://localhost:3001/api/polls/`, {
     method: 'POST',
@@ -45,6 +45,13 @@ function newPoll(poll) {
     body: JSON.stringify(poll)
   });
   return fetch(request).then(checkStatus).then(parseJSON);
+}
+
+function loginUser() {
+  return fetch(`http://localhost:3001/auth/github`)
+    .then(checkStatus)
+    // .then(parseJSON)
+    .then(resp => console.log('Resp', resp));
 }
 
 function checkStatus(response) {
@@ -63,6 +70,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll, voteFor, newPoll };
+const ApiCalls = { getPolls, getPoll, voteFor, newPoll, loginUser };
 
 export default ApiCalls;

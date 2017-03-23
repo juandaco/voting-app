@@ -8,8 +8,7 @@ authRouter.route('/github')
 authRouter.get('/github/callback', passportGithub.authenticate('github', { failureRedirect: '/failure' }),
   function(req, res) {
     // Successful authentication
-    console.log('Authenticated'); 
-    res.redirect('/');
+    res.redirect('http://localhost:3000/');
   });
 
 module.exports = authRouter;

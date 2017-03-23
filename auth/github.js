@@ -27,8 +27,6 @@ passport.use(
         upsert: true
       };
 
-      console.log(profile);
-
       // update the user if s/he exists or add a new user
       User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
         if (err) {

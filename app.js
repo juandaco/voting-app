@@ -7,6 +7,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
+
 // Load Routes
 const usersRouter = require('./routes/users');
 const pollsRouter = require('./routes/polls');
@@ -35,6 +36,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Allow Cross Origin Requests
+const corsConfig = require('./corsConfig');
+app.use(corsConfig);
 
 // Use Routes
 app.use('/api/users', usersRouter);

@@ -39,6 +39,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getPolls();
+    this.verifyUser();
   }
 
   getPolls() {
@@ -47,6 +48,19 @@ class App extends Component {
         pollData: polls
       });
     });
+  }
+
+  verifyUser() {
+
+    // if (userVerified) {
+    //   this.setState({
+    //     isUserAuth: true
+    //   })
+    // } else {
+    //   this.setState({
+    //     isUserAuth: false
+    //   })
+    // }
   }
 
   showDialog() {
@@ -150,13 +164,13 @@ class App extends Component {
   }
 
   loginUser() {
-    const w = 300;
-    const h = 400;
+    const w = 360;
+    const h = 560;
     const left = (screen.width/2)- w/2;
     const top = (screen.height/2) - h/2;
-
     const authURL = 'http://localhost:3001/auth/github';
-    const windowOptions = `menubar=0, resizable=0, scrollbars=0, width=${w}, height=${h}, top=${top}, left=${left}`;
+    const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
+
     window.open(
       authURL,
       'Github OAuth',

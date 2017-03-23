@@ -2,7 +2,7 @@
 
 function getPolls() {
   return fetch(`http://localhost:3001/api/polls`, {
-    accept: 'application/json'
+    accept: 'application/json',
   })
     .then(checkStatus)
     .then(parseJSON);
@@ -63,6 +63,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll, voteFor, newPoll, loginUser };
+const ApiCalls = { getPolls, getPoll, voteFor, newPoll};
 
 export default ApiCalls;

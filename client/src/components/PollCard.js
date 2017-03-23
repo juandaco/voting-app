@@ -8,7 +8,7 @@ import {
   Menu,
   MenuItem
 } from 'react-mdl';
-import { Doughnut } from 'react-chartjs-2';
+import PollCardChart from './PollCardChart';
 import ApiCalls from '../ApiCalls';
 
 class PollCard extends Component {
@@ -131,17 +131,10 @@ class PollCard extends Component {
             color: '#000'
           }}
         >
-          <div>
-            <h4>{this.props.pollData.pollTitle}</h4>
-            <Doughnut
-              data={this.state.data}
-              height={310}
-              redraw
-              options={{
-                maintainAspectRatio: true
-              }}
-            />
-          </div>
+          <PollCardChart
+            pollTitle={this.props.pollData.title}
+            chartData={this.state.data}
+          />
         </CardTitle>
         <CardActions border>
           <div

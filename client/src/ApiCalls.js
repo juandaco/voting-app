@@ -47,13 +47,6 @@ function newPoll(poll) {
   return fetch(request).then(checkStatus).then(parseJSON);
 }
 
-function loginUser() {
-  return fetch(`http://localhost:3001/auth/github`)
-    .then(checkStatus)
-    // .then(parseJSON)
-    .then(resp => console.log('Resp', resp));
-}
-
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;

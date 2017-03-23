@@ -150,10 +150,18 @@ class App extends Component {
   }
 
   loginUser() {
-    console.log('Login User');
-    ApiCalls.loginUser()
-      .then(resp => console.log(resp))
-      .catch(err => console.log(err));
+    const w = 300;
+    const h = 400;
+    const left = (screen.width/2)- w/2;
+    const top = (screen.height/2) - h/2;
+
+    const authURL = 'http://localhost:3001/auth/github';
+    const windowOptions = `menubar=0, resizable=0, scrollbars=0, width=${w}, height=${h}, top=${top}, left=${left}`;
+    window.open(
+      authURL,
+      'Github OAuth',
+      windowOptions
+    );
   }
 
   render() {

@@ -12,7 +12,8 @@ class PollCardChart extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // console.log(this.props.pollTitle);
-    // console.log(this.state.chartData);
+    // console.log(this.state.chartData.datasets[0].data);
+    // console.log(nextState.chartData.datasets[0].data);
     if (isEqual(this.state.chartData, nextState.chartData)) {
       return false;
     } else {

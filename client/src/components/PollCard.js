@@ -61,12 +61,13 @@ class PollCard extends Component {
 
   handleMenuOptionClick(e) {
     let option = e.target.innerHTML;
+    // The dalay is a UI fix not neccessary
     setTimeout(
       () =>
         this.setState({
           chosen: option
         }),
-      150
+      120
     );
   }
 

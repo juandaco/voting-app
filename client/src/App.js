@@ -200,7 +200,7 @@ class App extends Component {
           poll.title.toLocaleLowerCase()
         );
       })
-      .map((poll, index) => {
+      .map(poll => {
         let pollData = {
           id: poll._id,
           pollTitle: poll.title,
@@ -208,7 +208,7 @@ class App extends Component {
         };
         return (
           <PollCard
-            key={index}
+            key={poll._id}
             userVoteDialog={this.userVoteDialog}
             newOptionDialog={this.newOptionDialog}
             confirmationDialog={this.confirmationDialog}

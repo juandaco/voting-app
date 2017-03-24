@@ -6,17 +6,13 @@ class PollCardChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartData: {}
+      chartData: this.props.chartData
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      chartData: this.props.chartData
-    });
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
+    // console.log(this.props.pollTitle);
+    // console.log(this.state.chartData);
     if (isEqual(this.state.chartData, nextState.chartData)) {
       return false;
     } else {

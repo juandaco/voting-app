@@ -14,14 +14,22 @@ import ApiCalls from '../ApiCalls';
 class PollCard extends Component {
   constructor(props) {
     super(props);
+
+    let labels = this.props.pollData.options.map(option => {
+      return option.name;
+    });
+    let votes = this.props.pollData.options.map(option => {
+      return option.votes;
+    });
+
     this.state = {
       id: this.props.pollData.id,
-      chosen: '',
+      chosen: labels[0],
       data: {
-        labels: [],
+        labels,
         datasets: [
           {
-            data: [],
+            data: votes,
             backgroundColor: [
               '#FF6384',
               '#36A2EB',
@@ -44,44 +52,32 @@ class PollCard extends Component {
         ]
       }
     };
+
     // Function Bindings
     this.handleMenuOptionClick = this.handleMenuOptionClick.bind(this);
     this.userVote = this.userVote.bind(this);
     this.newOptionHandler = this.newOptionHandler.bind(this);
   }
 
-  componentDidMount() {
-    let labels = this.props.pollData.options.map(option => {
-      return option.name;
-    });
-    let votes = this.props.pollData.options.map(option => {
-      return option.votes;
-    });
-    let dataState = this.state.data;
-    dataState.labels = labels;
-    dataState.datasets[0].data = votes;
-
-    this.setState({
-      data: dataState,
-      chosen: this.state.data.labels[0]
-    });
-  }
-
-  handleMenuOptionClick(option) {
-    this.setState({
-      chosen: option
-    });
+  handleMenuOptionClick(e) {
+    let option = e.target.innerHTML;
+    setTimeout(
+      () =>
+        this.setState({
+          chosen: option
+        }),
+      150
+    );
   }
 
   userVote() {
-    let dataState = this.state.data;
-    let index = dataState.labels.indexOf(this.state.chosen);
-    dataState.datasets[0].data[index]++;
-
+    let stateData = Object.assign({}, this.state.data);
+    let index = stateData.labels.indexOf(this.state.chosen);
+    stateData.datasets[0].data[index]++;
     ApiCalls.voteFor(this.state.chosen, this.state.id)
       .then(results => {
         this.setState({
-          data: dataState
+          data: stateData
         });
         this.props.userVoteDialog(this.state.chosen);
       })
@@ -104,7 +100,7 @@ class PollCard extends Component {
       })
       .map((option, i) => {
         return (
-          <MenuItem key={i} onClick={() => this.handleMenuOptionClick(option)}>
+          <MenuItem key={i} onClick={this.handleMenuOptionClick}>
             {option}
           </MenuItem>
         );
@@ -117,11 +113,14 @@ class PollCard extends Component {
 
     return (
       <Card
-        shadow={0}
+        shadow={2}
         style={{
           width: 310,
-          margin: 'auto',
-          marginTop: 20
+          height: 470,
+          marginTop: 30,
+          marginBottom: 20,
+          marginLeft: 20,
+          marginRight: 20
         }}
       >
         <CardTitle
@@ -157,7 +156,6 @@ class PollCard extends Component {
               target={`vote-menu${this.state.id}`}
               valign="top"
               align="left"
-              ripple
             >
               {menuItems}
             </Menu>

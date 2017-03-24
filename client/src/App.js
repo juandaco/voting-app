@@ -92,15 +92,11 @@ class App extends Component {
   loginUser() {
     const w = 360;
     const h = 560;
-    const left = (screen.width/2)- w/2;
-    const top = (screen.height/2) - h/2;
+    const left = screen.width / 2 - w / 2;
+    const top = screen.height / 2 - h / 2;
     const authURL = 'http://localhost:3001/auth/github';
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
-    window.open(
-      authURL,
-      'Github OAuth',
-      windowOptions
-    );
+    window.open(authURL, 'Github OAuth', windowOptions);
   }
 
   verifyUser() {
@@ -197,31 +193,36 @@ class App extends Component {
 
   render() {
     let pollCards = null;
-    pollCards = this.state.pollData.filter(poll=> {
-      return fuzzysearch(this.state.searchValue.toLocaleLowerCase(), poll.title.toLocaleLowerCase());
-    })
-    .map((poll, index) => {
-      let pollData = {
-        id: poll._id,
-        pollTitle: poll.title,
-        options: poll.options
-      };
-      return (
-        <PollCard
-          key={index}
-          userVoteDialog={this.userVoteDialog}
-          newOptionDialog={this.newOptionDialog}
-          pollData={pollData}
-        />
-      );
-    });
+    pollCards = this.state.pollData
+      .filter(poll => {
+        return fuzzysearch(
+          this.state.searchValue.toLocaleLowerCase(),
+          poll.title.toLocaleLowerCase()
+        );
+      })
+      .map((poll, index) => {
+        let pollData = {
+          id: poll._id,
+          pollTitle: poll.title,
+          options: poll.options
+        };
+        return (
+          <PollCard
+            key={index}
+            userVoteDialog={this.userVoteDialog}
+            newOptionDialog={this.newOptionDialog}
+            confirmationDialog={this.confirmationDialog}
+            pollData={pollData}
+          />
+        );
+      });
 
     return (
       <div style={{ height: '100vh', position: 'relative' }}>
         <Layout fixedHeader fixedDrawer>
 
           <MyHeader
-            title='Home'
+            title="Home"
             searchValue={this.state.searchValue}
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
@@ -232,7 +233,14 @@ class App extends Component {
             loginUser={this.loginUser}
           />
 
-          <Content style={{ flex: 1, height: 100 }}>
+          <Content
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
+            }}
+          >
             {pollCards}
             <FABButton
               colored

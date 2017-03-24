@@ -14,7 +14,6 @@ import ApiCalls from '../ApiCalls';
 class PollCard extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       id: this.props.pollData.id,
       chosen: '',
@@ -46,7 +45,7 @@ class PollCard extends Component {
       }
     };
     // Function Bindings
-    this.handleClick = this.handleClick.bind(this);
+    this.handleMenuOptionClick = this.handleMenuOptionClick.bind(this);
     this.userVote = this.userVote.bind(this);
     this.newOptionHandler = this.newOptionHandler.bind(this);
   }
@@ -68,7 +67,7 @@ class PollCard extends Component {
     });
   }
 
-  handleClick(option) {
+  handleMenuOptionClick(option) {
     this.setState({
       chosen: option
     });
@@ -81,15 +80,15 @@ class PollCard extends Component {
 
     ApiCalls.voteFor(this.state.chosen, this.state.id)
       .then(results => {
-        this.props.userVoteDialog(this.state.chosen);
         this.setState({
           data: dataState
         });
+        this.props.userVoteDialog(this.state.chosen);
       })
       .catch(err => {
-        // this.props.confirmationDialog(
-        //   'There was an error with your vote, please try again'
-        // );
+        this.props.confirmationDialog(
+          'There was an error with your vote, please try again'
+        );
       });
   }
 
@@ -105,7 +104,7 @@ class PollCard extends Component {
       })
       .map((option, i) => {
         return (
-          <MenuItem key={i} onClick={() => this.handleClick(option)}>
+          <MenuItem key={i} onClick={() => this.handleMenuOptionClick(option)}>
             {option}
           </MenuItem>
         );
@@ -132,7 +131,7 @@ class PollCard extends Component {
           }}
         >
           <PollCardChart
-            pollTitle={this.props.pollData.title}
+            pollTitle={this.props.pollData.pollTitle}
             chartData={this.state.data}
           />
         </CardTitle>
@@ -158,7 +157,6 @@ class PollCard extends Component {
               target={`vote-menu${this.state.id}`}
               valign="top"
               align="left"
-              ripple
             >
               {menuItems}
             </Menu>

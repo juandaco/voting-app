@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Content, Icon, FABButton } from 'react-mdl';
-// Components
+// My Components
 import MyHeader from './components/MyHeader';
 import MyDrawer from './components/MyDrawer';
 import PollCard from './components/PollCard';
@@ -17,7 +17,7 @@ class App extends Component {
       dialogType: 'confirm',
       confirmationText: '',
       currentPollID: '',
-      isUserAuth: false,
+      isUserAuth: true,
       pollData: []
     };
 
@@ -39,7 +39,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getPolls();
-    this.verifyUser();
+    // this.verifyUser();
   }
 
   getPolls() {
@@ -70,6 +70,7 @@ class App extends Component {
   }
 
   hideDialog() {
+    // this.getPolls();
     this.setState({
       openDialog: false
     });

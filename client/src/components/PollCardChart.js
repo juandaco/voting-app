@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import isEqual from 'lodash.isequal';
+// import isEqual from 'lodash.isequal';
 
 class PollCardChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pollTitle: '',
       chartData: {}
     };
   }
@@ -17,18 +16,18 @@ class PollCardChart extends Component {
     });
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (isEqual(this.state.chartData ,nextProps.chartData)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (isEqual(this.state.chartData, nextState.chartData)) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
   render() {
     return (
       <div>
-        <h4>{this.props.Title}</h4>
+        <h4>{this.props.pollTitle}</h4>
         <Doughnut
           data={this.state.chartData}
           height={310}

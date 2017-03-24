@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Content, Icon, FABButton } from 'react-mdl';
+import fuzzysearch from 'fuzzysearch';
 // My Components
 import MyHeader from './components/MyHeader';
 import MyDrawer from './components/MyDrawer';
@@ -14,7 +15,7 @@ class App extends Component {
       searchValue: '',
       searchFocus: false,
       openDialog: false,
-      dialogType: 'confirm',
+      dialogType: '',
       confirmationText: '',
       currentPollID: '',
       isUserAuth: true,
@@ -31,17 +32,23 @@ class App extends Component {
     this.pollDialog = this.pollDialog.bind(this);
     this.createPoll = this.createPoll.bind(this);
     this.userVoteDialog = this.userVoteDialog.bind(this);
-    this.showDashboard = this.showDashboard.bind(this);
+    this.showUserDashboard = this.showUserDashboard.bind(this);
     this.getPolls = this.getPolls.bind(this);
-    this.createOption = this.createOption.bind(this);
+    this.createPollOption = this.createPollOption.bind(this);
     this.loginUser = this.loginUser.bind(this);
   }
 
+  /*
+    Lifecycle Hooks
+  */
   componentDidMount() {
     this.getPolls();
     // this.verifyUser();
   }
 
+  /*
+    Poll Functions
+  */
   getPolls() {
     ApiCalls.getPolls().then(polls => {
       this.setState({
@@ -50,8 +57,53 @@ class App extends Component {
     });
   }
 
-  verifyUser() {
+  searchPolls() {
+    // Search DataBase for Polls
+  }
 
+  createPoll(poll) {
+    this.hideDialog();
+    ApiCalls.newPoll(poll).then(result => {
+      this.getPolls();
+      this.confirmationDialog('Poll Created');
+    });
+  }
+
+  createPollOption(option) {
+    this.hideDialog();
+    ApiCalls.voteFor(option, this.state.currentPollID).then(result => {
+      this.getPolls();
+    });
+  }
+
+  /*
+    User Functions
+  */
+  showUserDashboard() {
+    if (this.state.isUserAuth) {
+      // API call to filter user Polls
+      // Show Polls
+      console.log('Showing Dashboard');
+    } else {
+      this.loginFirstDialog();
+    }
+  }
+
+  loginUser() {
+    const w = 360;
+    const h = 560;
+    const left = (screen.width/2)- w/2;
+    const top = (screen.height/2) - h/2;
+    const authURL = 'http://localhost:3001/auth/github';
+    const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
+    window.open(
+      authURL,
+      'Github OAuth',
+      windowOptions
+    );
+  }
+
+  verifyUser() {
     // if (userVerified) {
     //   this.setState({
     //     isUserAuth: true
@@ -63,6 +115,9 @@ class App extends Component {
     // }
   }
 
+  /*
+    PopUp Dialog Functions
+  */
   showDialog() {
     this.setState({
       openDialog: true
@@ -113,12 +168,20 @@ class App extends Component {
     }
   }
 
+  userVoteDialog(option) {
+    this.confirmationDialog(`You voted for ${option}`);
+  }
+
+  /*
+    Search Funtions 
+  */
   handleSearchChange(e) {
     const value = e.target.value;
     this.setState({
       searchValue: value
     });
   }
+
   handleSearchKeys(e) {
     const textInput = document.getElementById('textfield-Search');
     if (e.keyCode === 27) {
@@ -131,57 +194,13 @@ class App extends Component {
       textInput.blur();
     }
   }
-  searchPolls() {
-    // Search DataBase for Polls
-  }
-
-  createPoll(poll) {
-    this.hideDialog();
-    ApiCalls.newPoll(poll).then(result => {
-      this.getPolls();
-      this.confirmationDialog('Poll Created');
-    });
-  }
-
-  userVoteDialog(option) {
-    this.confirmationDialog(`You voted for ${option}`);
-  }
-
-  createOption(option) {
-    this.hideDialog();
-    ApiCalls.voteFor(option, this.state.currentPollID).then(result => {
-      this.getPolls();
-    });
-  }
-
-  showDashboard() {
-    if (this.state.isUserAuth) {
-      // API call to filter user Polls
-      // Show Polls
-      console.log('Showing Dashboard');
-    } else {
-      this.loginFirstDialog();
-    }
-  }
-
-  loginUser() {
-    const w = 360;
-    const h = 560;
-    const left = (screen.width/2)- w/2;
-    const top = (screen.height/2) - h/2;
-    const authURL = 'http://localhost:3001/auth/github';
-    const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
-
-    window.open(
-      authURL,
-      'Github OAuth',
-      windowOptions
-    );
-  }
 
   render() {
-    let pollCards;
-    pollCards = this.state.pollData.map((poll, index) => {
+    let pollCards = null;
+    pollCards = this.state.pollData.filter(poll=> {
+      return fuzzysearch(this.state.searchValue.toLocaleLowerCase(), poll.title.toLocaleLowerCase());
+    })
+    .map((poll, index) => {
       let pollData = {
         id: poll._id,
         pollTitle: poll.title,
@@ -200,15 +219,19 @@ class App extends Component {
     return (
       <div style={{ height: '100vh', position: 'relative' }}>
         <Layout fixedHeader fixedDrawer>
+
           <MyHeader
+            title='Home'
             searchValue={this.state.searchValue}
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
           />
+
           <MyDrawer
-            showDashboard={this.showDashboard}
+            showUserDashboard={this.showUserDashboard}
             loginUser={this.loginUser}
           />
+
           <Content style={{ flex: 1, height: 100 }}>
             {pollCards}
             <FABButton
@@ -220,13 +243,14 @@ class App extends Component {
             </FABButton>
           </Content>
         </Layout>
+
         <PopUpDialog
           open={this.state.openDialog}
           cancel={this.hideDialog}
           type={this.state.dialogType}
           confirmationText={this.state.confirmationText}
           createPoll={this.createPoll}
-          createOption={this.createOption}
+          createPollOption={this.createPollOption}
           currentPollID={this.state.currentPollID}
         />
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-// import isEqual from 'lodash.isequal';
+import isEqual from 'lodash.isequal';
 
 class PollCardChart extends Component {
   constructor(props) {
@@ -16,13 +16,13 @@ class PollCardChart extends Component {
     });
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (isEqual(this.state.chartData, nextState.chartData)) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (isEqual(this.state.chartData, nextState.chartData)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   render() {
     return (

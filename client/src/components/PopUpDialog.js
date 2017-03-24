@@ -52,7 +52,7 @@ class PopUpDialog extends Component {
   }
 
   addNewOption() {
-    this.props.createOption(this.state.newOption);
+    this.props.createPollOption(this.state.newOption);
   }
 
   addNewPoll() {

@@ -1,9 +1,9 @@
 import React from "react";
 import { Header, Textfield } from "react-mdl";
 
-const MyHeader = ({ searchValue, handleSearchChange, handleSearchKeys }) => {
+const MyHeader = ({ title, searchValue, handleSearchChange, handleSearchKeys }) => {
   return (
-    <Header title="Home">
+    <Header title={title}>
       <Textfield
         value={searchValue}
         onChange={handleSearchChange}

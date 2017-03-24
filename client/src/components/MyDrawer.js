@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drawer, Navigation, Icon } from 'react-mdl';
 
-const MyDrawer = ({ showDashboard, loginUser }) => {
+const MyDrawer = ({ showUserDashboard, loginUser }) => {
   return (
     <Drawer title="Pollster App">
       <Navigation>
@@ -17,7 +17,7 @@ const MyDrawer = ({ showDashboard, loginUser }) => {
           <Icon name="home" />
           <span className="drawer-link">Home</span>
         </a>
-        <a href="#" onClick={showDashboard}>
+        <a href="#" onClick={showUserDashboard}>
           <Icon name="inbox" />
           <span className="drawer-link">Dashboard</span>
         </a>

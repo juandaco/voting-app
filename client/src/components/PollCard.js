@@ -8,7 +8,7 @@ import {
   Menu,
   MenuItem
 } from 'react-mdl';
-import PollCardChart from './PollCardChart';
+import PollChart from './PollChart';
 import ApiCalls from '../ApiCalls';
 
 class PollCard extends Component {
@@ -130,7 +130,7 @@ class PollCard extends Component {
             color: '#000'
           }}
         >
-          <PollCardChart
+          <PollChart
             pollTitle={this.props.pollData.pollTitle}
             chartData={this.state.data}
           />
@@ -157,6 +157,7 @@ class PollCard extends Component {
               target={`vote-menu${this.state.id}`}
               valign="top"
               align="left"
+              ripple
             >
               {menuItems}
             </Menu>

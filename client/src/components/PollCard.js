@@ -9,84 +9,32 @@ import {
   MenuItem
 } from 'react-mdl';
 import PollChart from './PollChart';
-import ApiCalls from '../ApiCalls';
 
 class PollCard extends Component {
   constructor(props) {
     super(props);
-
-    let labels = this.props.pollData.options.map(option => {
-      return option.name;
-    });
-    let votes = this.props.pollData.options.map(option => {
-      return option.votes;
-    });
-
     this.state = {
       id: this.props.pollData.id,
-      chosen: labels[0],
-      data: {
-        labels,
-        datasets: [
-          {
-            data: votes,
-            backgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#1ABC9C',
-              '#EB984E',
-              '#AF7AC5',
-              '#CACFD2'
-            ],
-            hoverBackgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#1ABC9C',
-              '#EB984E',
-              '#AF7AC5',
-              '#CACFD2'
-            ]
-          }
-        ]
-      }
+      chosen: this.props.pollData.options[0].name
     };
 
     // Function Bindings
     this.handleMenuOptionClick = this.handleMenuOptionClick.bind(this);
-    this.userVote = this.userVote.bind(this);
     this.newOptionHandler = this.newOptionHandler.bind(this);
+    this.setUpMenuItems = this.setUpMenuItems.bind(this);
+    this.voteHandler = this.voteHandler.bind(this);
   }
 
   handleMenuOptionClick(e) {
     let option = e.target.innerHTML;
-    // The dalay is a UI fix not neccessary
+    // The delay is a UI fix not neccessary
     setTimeout(
       () =>
         this.setState({
           chosen: option
         }),
-      120
+      150
     );
-  }
-
-  userVote() {
-    let stateData = Object.assign({}, this.state.data);
-    let index = stateData.labels.indexOf(this.state.chosen);
-    stateData.datasets[0].data[index]++;
-    ApiCalls.voteFor(this.state.chosen, this.state.id)
-      .then(results => {
-        this.setState({
-          data: stateData
-        });
-        this.props.userVoteDialog(this.state.chosen);
-      })
-      .catch(err => {
-        this.props.confirmationDialog(
-          'There was an error with your vote, please try again'
-        );
-      });
   }
 
   newOptionHandler() {
@@ -94,8 +42,12 @@ class PollCard extends Component {
     this.props.newOptionDialog(id);
   }
 
-  render() {
-    let menuItems = this.state.data.labels
+  voteHandler() {
+    this.props.userVote(this.state.chosen, this.state.id);
+  }
+
+  setUpMenuItems(labels) {
+    return labels
       .filter(option => {
         return option !== this.state.chosen;
       })
@@ -106,11 +58,56 @@ class PollCard extends Component {
           </MenuItem>
         );
       });
+  }
 
+  setUpChosen() {
     let chosen = this.state.chosen;
     if (chosen.length > 9) {
-      chosen = chosen.substr(0, 9) + '...';
+      return chosen.substr(0, 9) + '...';
     }
+    return chosen;
+  }
+
+  setUpData(labels, votes) {
+    return {
+      labels: labels,
+      datasets: [
+        {
+          data: votes,
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#1ABC9C',
+            '#EB984E',
+            '#AF7AC5',
+            '#CACFD2'
+          ],
+          hoverBackgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#1ABC9C',
+            '#EB984E',
+            '#AF7AC5',
+            '#CACFD2'
+          ]
+        }
+      ]
+    };
+  }
+
+  render() {
+    let labels = this.props.pollData.options.map(option => {
+      return option.name;
+    });
+    let votes = this.props.pollData.options.map(option => {
+      return option.votes;
+    });
+
+    let chosen = this.setUpChosen();
+    let menuItems = this.setUpMenuItems(labels);
+    let chartData = this.setUpData(labels, votes);
 
     return (
       <Card
@@ -132,7 +129,7 @@ class PollCard extends Component {
         >
           <PollChart
             pollTitle={this.props.pollData.pollTitle}
-            chartData={this.state.data}
+            chartData={chartData}
           />
         </CardTitle>
         <CardActions border>
@@ -163,7 +160,7 @@ class PollCard extends Component {
           </div>
           <Button
             colored
-            onClick={this.userVote}
+            onClick={this.voteHandler}
             style={{
               display: 'inline-block',
               float: 'right',

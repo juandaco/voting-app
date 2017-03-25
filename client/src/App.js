@@ -36,6 +36,8 @@ class App extends Component {
     this.getPolls = this.getPolls.bind(this);
     this.createPollOption = this.createPollOption.bind(this);
     this.loginUser = this.loginUser.bind(this);
+    this.setUpPollCards = this.setUpPollCards.bind(this);
+    this.userVote = this.userVote.bind(this);
   }
 
   /*
@@ -109,6 +111,31 @@ class App extends Component {
     //     isUserAuth: false
     //   })
     // }
+  }
+
+  userVote(chosen, id) {
+    let pollIndex;
+    let poll = this.state.pollData.find((poll, i) => {
+      pollIndex = i;
+      return id === poll._id;
+    });
+    let optionIndex = poll.options.findIndex(option => {
+      return option.name === chosen;
+    });
+    let newData = this.state.pollData.slice();
+    newData[pollIndex].options[optionIndex].votes++;
+    ApiCalls.voteFor(chosen, id)
+      .then(results => {
+        this.userVoteDialog(chosen);
+        this.setState({
+          pollData: newData
+        });
+      })
+      .catch(err => {
+        this.confirmationDialog(
+          'There was an error with your vote, please try again'
+        );
+      });
   }
 
   /*
@@ -191,9 +218,8 @@ class App extends Component {
     }
   }
 
-  render() {
-    let pollCards = null;
-    pollCards = this.state.pollData
+  setUpPollCards() {
+    return this.state.pollData
       .filter(poll => {
         return fuzzysearch(
           this.state.searchValue.toLocaleLowerCase(),
@@ -209,6 +235,7 @@ class App extends Component {
         return (
           <PollCard
             key={poll._id}
+            userVote={this.userVote}
             userVoteDialog={this.userVoteDialog}
             newOptionDialog={this.newOptionDialog}
             confirmationDialog={this.confirmationDialog}
@@ -216,6 +243,10 @@ class App extends Component {
           />
         );
       });
+  }
+
+  render() {
+    let pollCards = this.setUpPollCards();
 
     return (
       <div style={{ height: '100vh', position: 'relative' }}>

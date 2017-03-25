@@ -38,8 +38,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Allow Cross Origin Requests
-const corsConfig = require('./corsConfig');
-app.use(corsConfig);
+// const corsConfig = require('./corsConfig');
+// app.use(corsConfig);
 
 // Use Routes
 app.use('/api/users', usersRouter);
@@ -47,21 +47,11 @@ app.use('/api/polls', pollsRouter);
 app.use('/auth', authRouter);
 
 // app.get('/', function(req, res) {
-//   let html = `<ul>\
-//       <li><a href='/auth/github'>GitHub</a></li>\
-//       <li><a href='/logout'>logout</a></li>\
-//     </ul>`;
-
-//   if (req.isAuthenticated()) {
-//     html += '<p>authenticated as user:</p>';
-//     html += '<pre>' + JSON.stringify(req.user, null, 4) + '</pre>';
-//   }
-
-//   res.send(html);
+//
 // });
+app.use(express.static('public'));
 
 app.get('/logout', function(req, res) {
-  console.log('logging out');
   req.logout();
   res.redirect('/');
 });

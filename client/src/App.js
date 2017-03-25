@@ -18,7 +18,7 @@ class App extends Component {
       dialogType: '',
       confirmationText: '',
       currentPollID: '',
-      isUserAuth: true,
+      isUserAuth: false,
       pollData: []
     };
 
@@ -96,9 +96,22 @@ class App extends Component {
     const h = 560;
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
+
     const authURL = 'http://localhost:3001/auth/github';
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
-    window.open(authURL, 'Github OAuth', windowOptions);
+    const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
+
+    // For AutoClosing the popUp once we get an answer
+    window.addEventListener(
+      'message',
+      function(e) {
+        if (e.data === 'closePopUp') {
+          oAuthPopUp.close();
+          window.removeEventListener('message', function(e) {}, false);
+        }
+      },
+      false
+    );
   }
 
   verifyUser() {
@@ -168,16 +181,10 @@ class App extends Component {
 
   newOptionDialog(id) {
     this.setState({
-      currentPollID: id
+      currentPollID: id,
+      dialogType: 'newOption'
     });
-    if (this.state.isUserAuth) {
-      this.setState({
-        dialogType: 'newOption'
-      });
-      this.showDialog();
-    } else {
-      this.loginFirstDialog();
-    }
+    this.showDialog();
   }
 
   pollDialog() {

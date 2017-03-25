@@ -1,14 +1,17 @@
 const express = require('express');
 const authRouter = express.Router();
 const passportGithub = require('../auth/github');
+const path = require('path');
 
-authRouter.route('/github')
-  .get(passportGithub.authenticate('github'));
+authRouter.get('/github', passportGithub.authenticate('github'));
 
-authRouter.get('/github/callback', passportGithub.authenticate('github', { failureRedirect: '/failure' }),
+authRouter.get(
+  '/github/callback',
+  passportGithub.authenticate('github', { failureRedirect: '/failure' }),
   function(req, res) {
-    // Successful authentication
-    res.redirect('http://localhost:3000/');
-  });
+    const popUpCloser = path.resolve('./auth/popup-closer.html');
+    res.sendFile(popUpCloser);
+  }
+);
 
 module.exports = authRouter;

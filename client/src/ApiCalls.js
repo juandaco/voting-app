@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 function getPolls() {
-  return fetch(`http://localhost:3001/api/polls`, {
+  return fetch(`/api/polls`, {
     accept: 'application/json',
   })
     .then(checkStatus)
@@ -9,7 +9,7 @@ function getPolls() {
 }
 
 function getPoll(id) {
-  return fetch(`http://localhost:3001/api/polls/${id}`, {
+  return fetch(`/api/polls/${id}`, {
     accept: 'application/json'
   })
     .then(checkStatus)
@@ -17,7 +17,7 @@ function getPoll(id) {
 }
 
 function voteFor(option, id) {
-  const request = new Request(`http://localhost:3001/api/polls/${id}`, {
+  const request = new Request(`/api/polls/${id}`, {
     method: 'PUT',
     headers: new Headers({
       'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ function newPoll(poll) {
     };
   });
 
-  const request = new Request(`http://localhost:3001/api/polls/`, {
+  const request = new Request(`/api/polls/`, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json'

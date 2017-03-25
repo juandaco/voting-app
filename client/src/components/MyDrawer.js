@@ -15,11 +15,11 @@ const MyDrawer = ({ showUserDashboard, loginUser }) => {
         <hr className="separator" />
         <a href="#">
           <Icon name="home" />
-          <span className="drawer-link">Home</span>
+          <span className="drawer-link">All Polls</span>
         </a>
         <a href="#" onClick={showUserDashboard}>
           <Icon name="inbox" />
-          <span className="drawer-link">Dashboard</span>
+          <span className="drawer-link">My Polls</span>
         </a>
         <a href="#">
           <Icon name="help_outline" />

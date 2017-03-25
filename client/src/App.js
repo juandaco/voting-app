@@ -126,10 +126,10 @@ class App extends Component {
     newData[pollIndex].options[optionIndex].votes++;
     ApiCalls.voteFor(chosen, id)
       .then(results => {
-        this.userVoteDialog(chosen);
         this.setState({
           pollData: newData
         });
+        this.userVoteDialog(chosen);
       })
       .catch(err => {
         this.confirmationDialog(

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Card,
-  CardTitle,
   CardActions,
   Button,
   Icon,
@@ -121,17 +120,10 @@ class PollCard extends Component {
           marginRight: 20
         }}
       >
-        <CardTitle
-          expand
-          style={{
-            color: '#000'
-          }}
-        >
-          <PollChart
-            pollTitle={this.props.pollData.pollTitle}
-            chartData={chartData}
-          />
-        </CardTitle>
+        <PollChart
+          pollTitle={this.props.pollData.pollTitle}
+          chartData={chartData}
+        />
         <CardActions border>
           <div
             style={{

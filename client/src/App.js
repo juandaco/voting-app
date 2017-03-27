@@ -130,12 +130,18 @@ class App extends Component {
   verifyUserSession() {
     ApiCalls.verifyUser()
       .then(resp => {
-        console.log(resp);
         if (resp.isUserAuth) {
+          // Set Authenticated State
           this.setState({
             isUserAuth: true,
             username: resp.username,
           });
+          // Hacky way to hide the Drawer after a successful Login
+          const drawer = document.getElementsByClassName('mdl-layout__drawer')[0];
+          drawer.classList.remove('is-visible');
+          drawer.setAttribute('aria-hidden', true);
+          const obfus = document.getElementsByClassName('mdl-layout__obfuscator')[0];
+          obfus.classList.remove('is-visible');
         } else {
           this.setState({
             isUserAuth: false,

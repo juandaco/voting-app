@@ -1,7 +1,15 @@
 import React from 'react';
 import { Drawer, Navigation, Icon } from 'react-mdl';
 
-const MyDrawer = ({ username, showUserDashboard, loginUser }) => {
+const MyDrawer = (
+  {
+    username,
+    showUserDashboard,
+    showAllPolls,
+    loginUser,
+    aboutDialog,
+  },
+) => {
   const divPointer = { cursor: 'pointer' };
   return (
     <Drawer title="Pollster App">
@@ -15,7 +23,10 @@ const MyDrawer = ({ username, showUserDashboard, loginUser }) => {
           <span className="drawer-link">{username || 'Login'}</span>
         </div>
 
-        <hr style={{ pointerEvents: 'none', marginTop: 10 }} className="separator" />
+        <hr
+          style={{ pointerEvents: 'none', marginTop: 10 }}
+          className="separator"
+        />
 
         {username
           ? <div style={divPointer} onClick={showUserDashboard}>
@@ -24,19 +35,19 @@ const MyDrawer = ({ username, showUserDashboard, loginUser }) => {
             </div>
           : null}
 
-        <div style={divPointer}>
+        <div style={divPointer} onClick={showAllPolls}>
           <Icon name="inbox" />
           <span className="drawer-link">All Polls</span>
         </div>
 
         {username
-          ? <div style={Object.assign({ display: 'fixed' }, divPointer)}>
+          ? <div style={divPointer}>
               <Icon name="exit_to_app" />
               <span className="drawer-link">Logout</span>
             </div>
           : null}
 
-        <div style={divPointer}>
+        <div style={divPointer} onClick={aboutDialog}>
           <Icon name="help_outline" />
           <span className="drawer-link">About</span>
         </div>

@@ -126,6 +126,16 @@ class PopUpDialog extends Component {
           </div>
         );
         break;
+      case 'about':
+        content = (
+          <p>This Page was made by Syntart with for FreeCodeCamp</p>
+        );
+        buttons = (
+          <Button type="button" onClick={cancel}>
+            OK
+          </Button>
+        );
+        break;
       default:
         content = '';
         buttons = '';

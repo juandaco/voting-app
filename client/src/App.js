@@ -20,6 +20,7 @@ class App extends Component {
       currentPollID: '',
       isUserAuth: false,
       username: '',
+      pollFilter: [],
       pollData: [],
     };
     // Method Bindings
@@ -39,6 +40,8 @@ class App extends Component {
     this.setUpPollCards = this.setUpPollCards.bind(this);
     this.userVote = this.userVote.bind(this);
     this.verifyUserSession = this.verifyUserSession.bind(this);
+    this.showAllPolls = this.showAllPolls.bind(this);
+    this.aboutDialog = this.aboutDialog.bind(this);
   }
 
   /*
@@ -74,7 +77,11 @@ class App extends Component {
         if (result.errorMessage) {
           this.confirmationDialog(result.errorMessage);
         } else {
-          this.getPolls();
+          if (this.state.pollFilter.length) {
+            this.getPolls();
+          } else {
+            this.showUserDashboard();
+          }
           this.confirmationDialog('Poll Created');
         }
       });
@@ -92,14 +99,21 @@ class App extends Component {
     });
   }
 
+  showAllPolls() {
+    this.setState({
+      pollFilter: [],
+    });
+  }
+
   /*
     User Functions
   */
   showUserDashboard() {
     if (this.state.isUserAuth) {
-      console.log('Showing Dashboard');
       ApiCalls.getUserPolls().then(resp => {
-        console.log(resp);
+        this.setState({
+          pollFilter: resp.polls,
+        });
       });
     } else {
       this.loginFirstDialog();
@@ -234,6 +248,13 @@ class App extends Component {
     this.confirmationDialog(`You voted for ${option}`);
   }
 
+  aboutDialog() {
+    this.setState({
+      dialogType: 'about',
+    });
+    this.showDialog();
+  }
+
   /*
     Search Funtions 
   */
@@ -265,6 +286,12 @@ class App extends Component {
             this.state.searchValue.toLocaleLowerCase(),
             poll.title.toLocaleLowerCase(),
           );
+        })
+        .filter(poll => {
+          if (this.state.pollFilter.length) {
+            return this.state.pollFilter.includes(poll._id);
+          }
+          return true;
         })
         .map(poll => {
           let pollData = {
@@ -302,7 +329,9 @@ class App extends Component {
           <MyDrawer
             username={this.state.username}
             showUserDashboard={this.showUserDashboard}
+            showAllPolls={this.showAllPolls}
             loginUser={this.loginUser}
+            aboutDialog={this.aboutDialog}
           />
 
           <Content

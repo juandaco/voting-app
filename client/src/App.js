@@ -22,7 +22,6 @@ class App extends Component {
       username: '',
       pollData: [],
     };
-
     // Method Bindings
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchKeys = this.handleSearchKeys.bind(this);
@@ -80,7 +79,9 @@ class App extends Component {
         }
       });
     } else {
-      this.confirmationDialog('The Poll needs a title and at least two options separated by lines');
+      this.confirmationDialog(
+        'The Poll needs a title and at least two options separated by lines',
+      );
     }
   }
 
@@ -304,6 +305,7 @@ class App extends Component {
             {pollCards}
             <FABButton
               colored
+              accent
               style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1 }}
               onClick={this.pollDialog}
             >

@@ -1,6 +1,15 @@
 function getPolls() {
   return fetch(`/api/polls`, {
-    accept: 'application/json'
+    accept: 'application/json',
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
+function getUserPolls() {
+  return fetch('/api/user/polls', {
+    accept: 'application/json',
+    credentials: 'include',
   })
     .then(checkStatus)
     .then(parseJSON);
@@ -8,7 +17,7 @@ function getPolls() {
 
 function getPoll(id) {
   return fetch(`/api/polls/${id}`, {
-    accept: 'application/json'
+    accept: 'application/json',
   })
     .then(checkStatus)
     .then(parseJSON);
@@ -18,11 +27,11 @@ function voteFor(option, id) {
   const request = new Request(`/api/polls/${id}`, {
     method: 'PUT',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }),
     body: JSON.stringify({
-      name: option
-    })
+      name: option,
+    }),
   });
   return fetch(request).then(checkStatus).then(parseJSON);
 }
@@ -31,17 +40,17 @@ function newPoll(poll) {
   poll.options = poll.options.split(/\n/).map(option => {
     return {
       name: option,
-      votes: 0
+      votes: 0,
     };
   });
 
   const request = new Request(`/api/polls/`, {
     method: 'POST',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     }),
     body: JSON.stringify(poll),
-    credentials: 'include'
+    credentials: 'include',
   });
   return fetch(request).then(checkStatus).then(parseJSON);
 }
@@ -49,7 +58,7 @@ function newPoll(poll) {
 function verifyUser() {
   return fetch(`/api/users/current`, {
     accept: 'application/json',
-    credentials: 'include'
+    credentials: 'include',
   })
     .then(checkStatus)
     .then(parseJSON);
@@ -73,6 +82,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll, voteFor, newPoll, verifyUser };
+const ApiCalls = { getPolls, getUserPolls, getPoll, voteFor, newPoll, verifyUser };
 
 export default ApiCalls;

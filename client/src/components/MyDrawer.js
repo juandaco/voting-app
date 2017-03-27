@@ -6,23 +6,41 @@ const MyDrawer = ({ username, showUserDashboard, loginUser }) => {
   return (
     <Drawer title="Pollster App">
       <Navigation>
-        <div style={divPointer} onClick={loginUser}>
+
+        <div
+          style={username ? null : divPointer}
+          onClick={username ? null : loginUser}
+        >
           <Icon name="account_circle" />
           <span className="drawer-link">{username || 'Login'}</span>
         </div>
-        <hr style={{pointerEvents: 'none'}} className="separator" />
+
+        <hr style={{ pointerEvents: 'none', marginTop: 10 }} className="separator" />
+
+        {username
+          ? <div style={divPointer} onClick={showUserDashboard}>
+              <Icon name="home" />
+              <span className="drawer-link">My Polls</span>
+            </div>
+          : null}
+
         <div style={divPointer}>
-          <Icon name="home" />
+          <Icon name="inbox" />
           <span className="drawer-link">All Polls</span>
         </div>
-        <div style={divPointer} onClick={showUserDashboard}>
-          <Icon name="inbox" />
-          <span className="drawer-link">My Polls</span>
-        </div>
+
+        {username
+          ? <div style={Object.assign({ display: 'fixed' }, divPointer)}>
+              <Icon name="exit_to_app" />
+              <span className="drawer-link">Logout</span>
+            </div>
+          : null}
+
         <div style={divPointer}>
           <Icon name="help_outline" />
           <span className="drawer-link">About</span>
         </div>
+
       </Navigation>
     </Drawer>
   );

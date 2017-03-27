@@ -67,10 +67,21 @@ class App extends Component {
 
   createPoll(poll) {
     this.hideDialog();
-    ApiCalls.newPoll(poll).then(result => {
-      this.getPolls();
-      this.confirmationDialog('Poll Created');
-    });
+    const pollValidation = poll.title !== '' &&
+      poll.options !== '' &&
+      /\n/g.test(poll.options);
+    if (pollValidation) {
+      ApiCalls.newPoll(poll).then(result => {
+        if (result.errorMessage) {
+          this.confirmationDialog(result.errorMessage);
+        } else {
+          this.getPolls();
+          this.confirmationDialog('Poll Created');
+        }
+      });
+    } else {
+      this.confirmationDialog('The Poll needs a title and at least two options separated by lines');
+    }
   }
 
   createPollOption(option) {
@@ -107,7 +118,7 @@ class App extends Component {
       e => {
         if (e.data === 'closePopUp') {
           oAuthPopUp.close();
-          this.setState({});
+          this.verifyUserSession();
           window.removeEventListener('message', function(e) {}, false);
         }
       },

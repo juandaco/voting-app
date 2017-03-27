@@ -97,9 +97,10 @@ class App extends Component {
   */
   showUserDashboard() {
     if (this.state.isUserAuth) {
-      // API call to filter user Polls
-      // Show Polls
       console.log('Showing Dashboard');
+      ApiCalls.getUserPolls().then(resp => {
+        console.log(resp);
+      });
     } else {
       this.loginFirstDialog();
     }
@@ -137,10 +138,14 @@ class App extends Component {
             username: resp.username,
           });
           // Hacky way to hide the Drawer after a successful Login
-          const drawer = document.getElementsByClassName('mdl-layout__drawer')[0];
+          const drawer = document.getElementsByClassName('mdl-layout__drawer')[
+            0
+          ];
           drawer.classList.remove('is-visible');
           drawer.setAttribute('aria-hidden', true);
-          const obfus = document.getElementsByClassName('mdl-layout__obfuscator')[0];
+          const obfus = document.getElementsByClassName(
+            'mdl-layout__obfuscator',
+          )[0];
           obfus.classList.remove('is-visible');
         } else {
           this.setState({

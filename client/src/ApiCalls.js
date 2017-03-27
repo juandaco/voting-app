@@ -7,7 +7,7 @@ function getPolls() {
 }
 
 function getUserPolls() {
-  return fetch('/api/user/polls', {
+  return fetch('/api/users/polls', {
     accept: 'application/json',
     credentials: 'include',
   })

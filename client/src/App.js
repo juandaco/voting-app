@@ -19,7 +19,8 @@ class App extends Component {
       confirmationText: '',
       currentPollID: '',
       isUserAuth: false,
-      pollData: []
+      username: '',
+      pollData: [],
     };
 
     // Method Bindings
@@ -38,6 +39,7 @@ class App extends Component {
     this.loginUser = this.loginUser.bind(this);
     this.setUpPollCards = this.setUpPollCards.bind(this);
     this.userVote = this.userVote.bind(this);
+    this.verifyUserSession = this.verifyUserSession.bind(this);
   }
 
   /*
@@ -45,7 +47,7 @@ class App extends Component {
   */
   componentDidMount() {
     this.getPolls();
-    // this.verifyUser();
+    this.verifyUserSession();
   }
 
   /*
@@ -54,7 +56,7 @@ class App extends Component {
   getPolls() {
     ApiCalls.getPolls().then(polls => {
       this.setState({
-        pollData: polls
+        pollData: polls,
       });
     });
   }
@@ -96,34 +98,41 @@ class App extends Component {
     const h = 560;
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
-
     const authURL = 'http://localhost:3001/auth/github';
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
     const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
-
     // For AutoClosing the popUp once we get an answer
     window.addEventListener(
       'message',
-      function(e) {
+      e => {
         if (e.data === 'closePopUp') {
           oAuthPopUp.close();
+          this.setState({});
           window.removeEventListener('message', function(e) {}, false);
         }
       },
-      false
+      false,
     );
   }
 
-  verifyUser() {
-    // if (userVerified) {
-    //   this.setState({
-    //     isUserAuth: true
-    //   })
-    // } else {
-    //   this.setState({
-    //     isUserAuth: false
-    //   })
-    // }
+  verifyUserSession() {
+    ApiCalls.verifyUser()
+      .then(resp => {
+        console.log(resp);
+        if (resp.isUserAuth) {
+          this.setState({
+            isUserAuth: true,
+            username: resp.username,
+          });
+        } else {
+          this.setState({
+            isUserAuth: false,
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   userVote(chosen, id) {
@@ -140,13 +149,13 @@ class App extends Component {
     ApiCalls.voteFor(chosen, id)
       .then(results => {
         this.setState({
-          pollData: newData
+          pollData: newData,
         });
         this.userVoteDialog(chosen);
       })
       .catch(err => {
         this.confirmationDialog(
-          'There was an error with your vote, please try again'
+          'There was an error with your vote, please try again',
         );
       });
   }
@@ -156,21 +165,21 @@ class App extends Component {
   */
   showDialog() {
     this.setState({
-      openDialog: true
+      openDialog: true,
     });
   }
 
   hideDialog() {
     // this.getPolls();
     this.setState({
-      openDialog: false
+      openDialog: false,
     });
   }
 
   confirmationDialog(text) {
     this.setState({
       dialogType: 'confirm',
-      confirmationText: text
+      confirmationText: text,
     });
     this.showDialog();
   }
@@ -182,7 +191,7 @@ class App extends Component {
   newOptionDialog(id) {
     this.setState({
       currentPollID: id,
-      dialogType: 'newOption'
+      dialogType: 'newOption',
     });
     this.showDialog();
   }
@@ -190,7 +199,7 @@ class App extends Component {
   pollDialog() {
     if (this.state.isUserAuth) {
       this.setState({
-        dialogType: 'poll'
+        dialogType: 'poll',
       });
       this.showDialog();
     } else {
@@ -208,7 +217,7 @@ class App extends Component {
   handleSearchChange(e) {
     const value = e.target.value;
     this.setState({
-      searchValue: value
+      searchValue: value,
     });
   }
 
@@ -226,30 +235,31 @@ class App extends Component {
   }
 
   setUpPollCards() {
-    return this.state.pollData
-      .filter(poll => {
-        return fuzzysearch(
-          this.state.searchValue.toLocaleLowerCase(),
-          poll.title.toLocaleLowerCase()
-        );
-      })
-      .map(poll => {
-        let pollData = {
-          id: poll._id,
-          pollTitle: poll.title,
-          options: poll.options
-        };
-        return (
-          <PollCard
-            key={poll._id}
-            userVote={this.userVote}
-            userVoteDialog={this.userVoteDialog}
-            newOptionDialog={this.newOptionDialog}
-            confirmationDialog={this.confirmationDialog}
-            pollData={pollData}
-          />
-        );
-      });
+    if (Array.isArray(this.state.pollData))
+      return this.state.pollData
+        .filter(poll => {
+          return fuzzysearch(
+            this.state.searchValue.toLocaleLowerCase(),
+            poll.title.toLocaleLowerCase(),
+          );
+        })
+        .map(poll => {
+          let pollData = {
+            id: poll._id,
+            pollTitle: poll.title,
+            options: poll.options,
+          };
+          return (
+            <PollCard
+              key={poll._id}
+              userVote={this.userVote}
+              userVoteDialog={this.userVoteDialog}
+              newOptionDialog={this.newOptionDialog}
+              confirmationDialog={this.confirmationDialog}
+              pollData={pollData}
+            />
+          );
+        });
   }
 
   render() {
@@ -267,6 +277,7 @@ class App extends Component {
           />
 
           <MyDrawer
+            username={this.state.username}
             showUserDashboard={this.showUserDashboard}
             loginUser={this.loginUser}
           />
@@ -276,7 +287,7 @@ class App extends Component {
               display: 'flex',
               flexDirection: 'row',
               flexWrap: 'wrap',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             {pollCards}

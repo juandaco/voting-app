@@ -5,8 +5,16 @@ const User = new Schema({
   username: String,
   githubID: String,
   name: String,
-  // voted: Array,
-  // polls: Array
+  voted: {
+    type: Array,
+    default: [],
+  },
+  polls: {
+    type: Array,
+    default: []
+  }
+}, {
+  versionKey: false,
 });
 
 module.exports = mongoose.model('User', User);

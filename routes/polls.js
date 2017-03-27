@@ -1,24 +1,27 @@
 const express = require('express');
-const pollRouter = express.Router();
+const pollsRouter = express.Router();
 const Polls = require('../models/polls');
+const isLoggedIn = require('../auth/isLoggedIn');
 
-pollRouter.route('/')
-  // Return all polls
+pollsRouter
+  .route('/')
   .get(function(req, res, next) {
+    // Return all polls
     Polls.find({}, function(err, polls) {
       if (err) throw err;
       res.json(polls);
     });
   })
-  // Create a new Poll
-  .post(function(req, res, next) {
+  .post(isLoggedIn, function(req, res, next) {
+    // Create a new Poll
     Polls.create(req.body, function(err, poll) {
       if (err) throw err;
       res.json(poll);
     });
   });
 
-pollRouter.route('/:pollId')
+pollsRouter
+  .route('/:pollId')
   // Return Specific Poll
   .get(function(req, res, next) {
     Polls.findById(req.params.pollId, function(err, poll) {
@@ -26,11 +29,10 @@ pollRouter.route('/:pollId')
       res.json(poll);
     });
   })
-  // Update a Poll 
+  // Update a Poll
   .put(function(req, res, next) {
     Polls.findById(req.params.pollId, function(err, poll) {
       if (err) throw err;
-
       // Find out if option exists
       let hasOption = false;
       let indexOption;
@@ -50,7 +52,7 @@ pollRouter.route('/:pollId')
           res.json(poll);
         });
       } else {
-        // Create the option 
+        // Create the option
         poll.options.push({
           name: req.body.name,
           votes: 1
@@ -62,12 +64,12 @@ pollRouter.route('/:pollId')
       }
     });
   })
-  // Delete a Poll, Verify Admin or User Posesion
   .delete(function(req, res, next) {
+    // Delete a Poll, Verify Admin or User Posesion
     Polls.findByIdAndRemove(req.params.pollId, function(err, resp) {
       if (err) throw err;
       res.json(resp);
     });
   });
 
-module.exports = pollRouter;
+module.exports = pollsRouter;

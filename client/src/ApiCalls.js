@@ -1,8 +1,6 @@
-/* eslint-disable no-undef */
-
 function getPolls() {
   return fetch(`/api/polls`, {
-    accept: 'application/json',
+    accept: 'application/json'
   })
     .then(checkStatus)
     .then(parseJSON);
@@ -42,11 +40,24 @@ function newPoll(poll) {
     headers: new Headers({
       'Content-Type': 'application/json'
     }),
-    body: JSON.stringify(poll)
+    body: JSON.stringify(poll),
+    credentials: 'include'
   });
   return fetch(request).then(checkStatus).then(parseJSON);
 }
 
+function verifyUser() {
+  return fetch(`/api/users/current`, {
+    accept: 'application/json',
+    credentials: 'include'
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
+/*
+  Generic functions
+*/
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -54,7 +65,6 @@ function checkStatus(response) {
     const error = new Error(`HTTP Error ${response.statusText}`);
     error.status = response.statusText;
     error.response = response;
-    console.log(error); // eslint-disable-line no-console
     throw error;
   }
 }
@@ -63,6 +73,6 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getPoll, voteFor, newPoll};
+const ApiCalls = { getPolls, getPoll, voteFor, newPoll, verifyUser };
 
 export default ApiCalls;

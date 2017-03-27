@@ -20,7 +20,9 @@ passport.use(
       const updates = {
         username: profile.username,
         name: profile.displayName,
-        githubID: profile.id
+        githubID: profile.id,
+        voted: [],
+        polls: [],
       };
 
       const options = {

@@ -2,6 +2,7 @@ import React from 'react';
 import { CardTitle } from 'react-mdl';
 import { Doughnut } from 'react-chartjs-2';
 
+
 const PollChart = ({ pollTitle, chartData }) => {
   return (
     <CardTitle
@@ -16,7 +17,8 @@ const PollChart = ({ pollTitle, chartData }) => {
           data={chartData}
           height={310}
           options={{
-            maintainAspectRatio: true
+            maintainAspectRatio: true,
+            /*animation: false, // for Mobile??? */
           }}
         />
       </div>

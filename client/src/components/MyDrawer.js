@@ -1,30 +1,28 @@
 import React from 'react';
 import { Drawer, Navigation, Icon } from 'react-mdl';
 
-const MyDrawer = ({ showUserDashboard, loginUser }) => {
+const MyDrawer = ({ username, showUserDashboard, loginUser }) => {
+  const divPointer = { cursor: 'pointer' };
   return (
     <Drawer title="Pollster App">
       <Navigation>
-        <a
-          href="#"
-          onClick={loginUser}
-        >
+        <div style={divPointer} onClick={loginUser}>
           <Icon name="account_circle" />
-          <span className="drawer-link">Login</span>
-        </a>
-        <hr className="separator" />
-        <a href="#">
+          <span className="drawer-link">{username || 'Login'}</span>
+        </div>
+        <hr style={{pointerEvents: 'none'}} className="separator" />
+        <div style={divPointer}>
           <Icon name="home" />
           <span className="drawer-link">All Polls</span>
-        </a>
-        <a href="#" onClick={showUserDashboard}>
+        </div>
+        <div style={divPointer} onClick={showUserDashboard}>
           <Icon name="inbox" />
           <span className="drawer-link">My Polls</span>
-        </a>
-        <a href="#">
+        </div>
+        <div style={divPointer}>
           <Icon name="help_outline" />
           <span className="drawer-link">About</span>
-        </a>
+        </div>
       </Navigation>
     </Drawer>
   );

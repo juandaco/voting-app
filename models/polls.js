@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const pollOptions = new Schema({
-  name: String,
-  votes: Number
-}, { _id: false });
+const pollOptions = new Schema(
+  {
+    name: String,
+    votes: Number
+  },
+  {
+    _id: false,
+    versionKey: false
+  }
+);
 
-const Poll = new Schema({
-  title: String,
-  options: [pollOptions]
-});
+const Poll = new Schema(
+  {
+    title: String,
+    options: [pollOptions]
+  },
+  {
+    versionKey: false
+  }
+);
 
 module.exports = mongoose.model('Poll', Poll);

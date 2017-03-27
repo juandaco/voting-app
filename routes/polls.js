@@ -1,6 +1,7 @@
 const express = require('express');
 const pollsRouter = express.Router();
 const Polls = require('../models/polls');
+const Users = require('../models/users');
 const isLoggedIn = require('../auth/isLoggedIn');
 
 pollsRouter
@@ -16,6 +17,13 @@ pollsRouter
     // Create a new Poll
     Polls.create(req.body, function(err, poll) {
       if (err) throw err;
+      Users.findOneAndUpdate(
+        { _id: req.user._id },
+        { $push: { polls: poll._id } },
+        function(err, user) {
+          if (err) throw err;
+        }
+      );
       res.json(poll);
     });
   });

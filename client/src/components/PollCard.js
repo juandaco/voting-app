@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Card, CardActions, Button, Icon, Menu, MenuItem } from 'react-mdl';
+import {
+  Card,
+  CardActions,
+  Button,
+  FABButton,
+  Icon,
+  Menu,
+  MenuItem,
+} from 'react-mdl';
 import PollChart from './PollChart';
 
 class PollCard extends Component {
@@ -9,12 +17,12 @@ class PollCard extends Component {
       id: this.props.pollData.id,
       chosen: this.props.pollData.options[0].name,
     };
-
     // Function Bindings
     this.handleMenuOptionClick = this.handleMenuOptionClick.bind(this);
     this.newOptionHandler = this.newOptionHandler.bind(this);
     this.setUpMenuItems = this.setUpMenuItems.bind(this);
     this.voteHandler = this.voteHandler.bind(this);
+    this.setUpDeleteButton.bind(this);
   }
 
   handleMenuOptionClick(e) {
@@ -60,6 +68,18 @@ class PollCard extends Component {
     return chosen;
   }
 
+  setUpDeleteButton() {
+    if (this.props.userActive) {
+      return {
+        position: 'absolute',
+        right: 7,
+        top: 7,
+      };
+    } else {
+      return { display: 'none' };
+    }
+  }
+
   setUpData(labels, votes) {
     return {
       labels: labels,
@@ -93,6 +113,7 @@ class PollCard extends Component {
     let labels = this.props.pollData.options.map(option => {
       return option.name;
     });
+
     let votes = this.props.pollData.options.map(option => {
       return option.votes;
     });
@@ -100,6 +121,7 @@ class PollCard extends Component {
     let chosen = this.setUpChosen();
     let menuItems = this.setUpMenuItems(labels);
     let chartData = this.setUpData(labels, votes);
+    let deleteButton = this.setUpDeleteButton();
 
     return (
       <Card
@@ -114,10 +136,17 @@ class PollCard extends Component {
           display: this.props.visible ? 'flex' : 'none',
         }}
       >
+
+        {/* Delete Button only visible for User Polls */}
+        <FABButton mini style={deleteButton}>
+          <Icon name="delete" />
+        </FABButton>
+
         <PollChart
           pollTitle={this.props.pollData.pollTitle}
           chartData={chartData}
         />
+
         <CardActions border>
           <div
             style={{
@@ -128,7 +157,7 @@ class PollCard extends Component {
           >
             <Button
               id={`vote-menu${this.state.id}`}
-              style={{ width: 130, fontSize: 12 }}
+              style={{ width: 130, fontSize: 13, fontWeight: 500 }}
             >
               {chosen}
               <Icon
@@ -152,6 +181,7 @@ class PollCard extends Component {
               float: 'right',
               width: 40,
               padding: 0,
+              fontWeight: 500,
             }}
           >
             Vote{' '}
@@ -164,6 +194,7 @@ class PollCard extends Component {
               float: 'right',
               width: 100,
               padding: 0,
+              fontWeight: 500,
             }}
           >
             New Option

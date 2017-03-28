@@ -20,6 +20,7 @@ class App extends Component {
       currentPollID: '',
       isUserAuth: false,
       username: '',
+      userPolls: [],
       pollFilter: [],
       pollData: [],
     };
@@ -48,7 +49,7 @@ class App extends Component {
   /*
     Lifecycle Hooks
   */
-  componentDidMount() {
+  componentWillMount() {
     this.getPolls();
     this.verifyUserSession();
   }
@@ -115,6 +116,7 @@ class App extends Component {
       ApiCalls.getUserPolls().then(resp => {
         this.setState({
           pollFilter: resp.polls,
+          userPolls: resp.polls,
         });
         this.hideDrawer();
       });
@@ -154,6 +156,7 @@ class App extends Component {
             isUserAuth: true,
             username: resp.username,
           });
+          this.showUserDashboard();
           this.hideDrawer();
         } else {
           this.setState({
@@ -302,6 +305,7 @@ class App extends Component {
             poll.title.toLowerCase(),
           );
         }
+        let userActive = this.state.userPolls.includes(poll._id);
         return (
           <PollCard
             key={poll._id}
@@ -311,6 +315,7 @@ class App extends Component {
             confirmationDialog={this.confirmationDialog}
             pollData={pollData}
             visible={userVisible && searchVisible}
+            userActive={userActive}
           />
         );
       });

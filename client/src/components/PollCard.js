@@ -3,7 +3,7 @@ import {
   Card,
   CardActions,
   Button,
-  FABButton,
+  IconButton,
   Icon,
   Menu,
   MenuItem,
@@ -72,8 +72,8 @@ class PollCard extends Component {
     if (this.props.userActive) {
       return {
         position: 'absolute',
-        right: 7,
-        top: 7,
+        right: 38,
+        top: 5,
       };
     } else {
       return { display: 'none' };
@@ -138,9 +138,8 @@ class PollCard extends Component {
       >
 
         {/* Delete Button only visible for User Polls */}
-        <FABButton mini style={deleteButton}>
-          <Icon name="delete" />
-        </FABButton>
+        <IconButton name="delete" style={deleteButton} />
+        <IconButton name="share" />
 
         <PollChart
           pollTitle={this.props.pollData.pollTitle}

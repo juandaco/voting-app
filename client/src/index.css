@@ -10,4 +10,9 @@ dialog {
   position: absolute !important;
   top: 80px !important; }
 
+.mdl-button--icon {
+  position: absolute;
+  right: 5px;
+  top: 5px; }
+
 /*# sourceMappingURL=index.css.map */

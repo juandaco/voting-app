@@ -340,6 +340,7 @@ class App extends Component {
 
           <MyDrawer
             username={this.state.username}
+            userPollCount={this.state.userPolls.length}
             showUserDashboard={this.showUserDashboard}
             showAllPolls={this.showAllPolls}
             loginUser={this.loginUser}

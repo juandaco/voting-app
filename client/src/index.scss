@@ -12,3 +12,10 @@ dialog {
   position: absolute !important;
   top: 80px !important;
 }
+
+// For Share Button
+.mdl-button--icon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}

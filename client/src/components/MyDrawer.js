@@ -1,9 +1,10 @@
 import React from 'react';
-import { Drawer, Navigation, Icon } from 'react-mdl';
+import { Drawer, Navigation, Badge, Icon } from 'react-mdl';
 
 const MyDrawer = (
   {
     username,
+    userPollCount,
     showUserDashboard,
     showAllPolls,
     loginUser,
@@ -31,7 +32,10 @@ const MyDrawer = (
         {username
           ? <div style={divPointer} onClick={showUserDashboard}>
               <Icon name="home" />
-              <span className="drawer-link">My Polls</span>
+              <Badge text={userPollCount} style={{marginLeft: -12, marginTop: -10}}> </Badge>
+              <span className="drawer-link" style={{ marginLeft: 5 }}>
+                My Polls
+              </span>
             </div>
           : null}
 

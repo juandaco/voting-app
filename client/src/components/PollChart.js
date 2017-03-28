@@ -18,7 +18,7 @@ const PollChart = ({ pollTitle, chartData }) => {
           height={310}
           options={{
             maintainAspectRatio: true,
-            /* animation: false, // for Mobile??? */
+            animation: false, // for Mobile??? */
           }}
         />
       </div>

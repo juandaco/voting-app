@@ -42,6 +42,7 @@ class App extends Component {
     this.verifyUserSession = this.verifyUserSession.bind(this);
     this.showAllPolls = this.showAllPolls.bind(this);
     this.aboutDialog = this.aboutDialog.bind(this);
+    this.hideDrawer = this.hideDrawer.bind(this);
   }
 
   /*
@@ -103,6 +104,7 @@ class App extends Component {
     this.setState({
       pollFilter: [],
     });
+    this.hideDrawer();
   }
 
   /*
@@ -114,6 +116,7 @@ class App extends Component {
         this.setState({
           pollFilter: resp.polls,
         });
+        this.hideDrawer();
       });
     } else {
       this.loginFirstDialog();
@@ -151,16 +154,7 @@ class App extends Component {
             isUserAuth: true,
             username: resp.username,
           });
-          // Hacky way to hide the Drawer after a successful Login
-          const drawer = document.getElementsByClassName('mdl-layout__drawer')[
-            0
-          ];
-          drawer.classList.remove('is-visible');
-          drawer.setAttribute('aria-hidden', true);
-          const obfus = document.getElementsByClassName(
-            'mdl-layout__obfuscator',
-          )[0];
-          obfus.classList.remove('is-visible');
+          this.hideDrawer();
         } else {
           this.setState({
             isUserAuth: false,
@@ -253,6 +247,17 @@ class App extends Component {
       dialogType: 'about',
     });
     this.showDialog();
+    this.hideDrawer();
+  }
+
+  // Drawer Function
+  hideDrawer() {
+    // Hacky way to hide the Drawer after a successful Login
+    const drawer = document.getElementsByClassName('mdl-layout__drawer')[0];
+    drawer.classList.remove('is-visible');
+    drawer.setAttribute('aria-hidden', true);
+    const obfus = document.getElementsByClassName('mdl-layout__obfuscator')[0];
+    obfus.classList.remove('is-visible');
   }
 
   /*
@@ -322,7 +327,7 @@ class App extends Component {
         <Layout fixedHeader fixedDrawer>
 
           <MyHeader
-            title="Home"
+            title={this.state.pollFilter.length ? 'My Polls' : 'All Polls'}
             searchValue={this.state.searchValue}
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}

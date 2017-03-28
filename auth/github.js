@@ -21,12 +21,11 @@ passport.use(
         username: profile.username,
         name: profile.displayName,
         githubID: profile.id,
-        voted: [],
-        polls: [],
       };
 
       const options = {
-        upsert: true
+        upsert: true,
+        setDefaultsOnInsert: true
       };
 
       // update the user if s/he exists or add a new user

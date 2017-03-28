@@ -31,7 +31,7 @@ app.use(cookieParser('0g93j@#GEap7890*k'));
 app.use(
   session({
     secret: '0g93j@#GEap7890*k',
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
   })

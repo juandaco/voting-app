@@ -65,6 +65,15 @@ function verifyUser() {
     .then(parseJSON);
 }
 
+function userLogout() {
+  return fetch(`/api/users/logout`, {
+    accept: 'application/json',
+    credentials: 'include',
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
 /*
   Generic functions
 */
@@ -90,6 +99,7 @@ const ApiCalls = {
   voteFor,
   newPoll,
   verifyUser,
+  userLogout,
 };
 
 export default ApiCalls;

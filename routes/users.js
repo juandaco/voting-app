@@ -33,4 +33,17 @@ usersRouter.get('/polls', function(req, res, next) {
   }
 });
 
+usersRouter.get('/logout', function(req, res, next) {
+  if (req.isAuthenticated()) {
+    req.logout();
+    res.json({
+      logoutMessage: 'Sorry to see you go!!!'
+    });
+  } else {
+    res.json({
+      errorMessage: 'You need to login first'
+    });
+  }
+});
+
 module.exports = usersRouter;

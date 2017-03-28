@@ -38,6 +38,7 @@ class App extends Component {
     this.getPolls = this.getPolls.bind(this);
     this.createPollOption = this.createPollOption.bind(this);
     this.loginUser = this.loginUser.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
     this.setUpPollCards = this.setUpPollCards.bind(this);
     this.userVote = this.userVote.bind(this);
     this.verifyUserSession = this.verifyUserSession.bind(this);
@@ -147,6 +148,20 @@ class App extends Component {
       },
       false,
     );
+  }
+
+  logoutUser() {
+    ApiCalls.userLogout().then(resp => {
+      this.setState({
+        isUserAuth: false,
+        username: '',
+        userPolls: [],
+        pollFilter: [],
+      });
+      this.hideDrawer();
+      this.confirmationDialog(resp.logoutMessage);
+      this.showAllPolls();
+    });
   }
 
   verifyUserSession() {
@@ -345,6 +360,7 @@ class App extends Component {
             showUserDashboard={this.showUserDashboard}
             showAllPolls={this.showAllPolls}
             loginUser={this.loginUser}
+            logoutUser={this.logoutUser}
             aboutDialog={this.aboutDialog}
           />
 

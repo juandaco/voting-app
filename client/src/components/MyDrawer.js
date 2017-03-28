@@ -8,6 +8,7 @@ const MyDrawer = (
     showUserDashboard,
     showAllPolls,
     loginUser,
+    logoutUser,
     aboutDialog,
   },
 ) => {
@@ -45,7 +46,7 @@ const MyDrawer = (
         </div>
 
         {username
-          ? <div style={divPointer}>
+          ? <div style={divPointer} onClick={logoutUser}>
               <Icon name="exit_to_app" />
               <span className="drawer-link">Logout</span>
             </div>

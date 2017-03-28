@@ -39,7 +39,7 @@ pollsRouter
     });
   })
   // Update a Poll
-  .put(function(req, res, next) {
+  .put(isLoggedIn, function(req, res, next) {
     Polls.findById(req.params.pollId, function(err, poll) {
       if (err) throw err;
       // Find out if option exists

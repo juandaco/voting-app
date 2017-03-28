@@ -32,6 +32,7 @@ function voteFor(option, id) {
     body: JSON.stringify({
       name: option,
     }),
+    credentials: 'include',
   });
   return fetch(request).then(checkStatus).then(parseJSON);
 }
@@ -82,6 +83,13 @@ function parseJSON(response) {
   return response.json();
 }
 
-const ApiCalls = { getPolls, getUserPolls, getPoll, voteFor, newPoll, verifyUser };
+const ApiCalls = {
+  getPolls,
+  getUserPolls,
+  getPoll,
+  voteFor,
+  newPoll,
+  verifyUser,
+};
 
 export default ApiCalls;

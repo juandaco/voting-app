@@ -65,10 +65,6 @@ class App extends Component {
     });
   }
 
-  searchPolls() {
-    // Search DataBase for Polls
-  }
-
   createPoll(poll) {
     this.hideDialog();
     const pollValidation = poll.title !== '' &&
@@ -78,6 +74,7 @@ class App extends Component {
       ApiCalls.newPoll(poll).then(result => {
         if (result.errorMessage) {
           this.confirmationDialog(result.errorMessage);
+          this.verifyUserSession();
         } else {
           if (this.state.pollFilter.length) {
             this.getPolls();
@@ -97,7 +94,12 @@ class App extends Component {
   createPollOption(option) {
     this.hideDialog();
     ApiCalls.voteFor(option, this.state.currentPollID).then(result => {
-      this.getPolls();
+      if (result.errorMessage) {
+        this.confirmationDialog(result.errorMessage);
+        this.verifyUserSession();
+      } else {
+        this.getPolls();
+      }
     });
   }
 
@@ -121,7 +123,7 @@ class App extends Component {
         this.hideDrawer();
       });
     } else {
-      this.loginFirstDialog();
+      this.confirmationDialog('You need to login first.');
     }
   }
 
@@ -218,16 +220,16 @@ class App extends Component {
     this.showDialog();
   }
 
-  loginFirstDialog() {
-    this.confirmationDialog('You need to login first.');
-  }
-
   newOptionDialog(id) {
-    this.setState({
-      currentPollID: id,
-      dialogType: 'newOption',
-    });
-    this.showDialog();
+    if (this.state.isUserAuth) {
+      this.setState({
+        currentPollID: id,
+        dialogType: 'newOption',
+      });
+      this.showDialog();
+    } else {
+      this.confirmationDialog('You need to login first');
+    }
   }
 
   pollDialog() {
@@ -237,7 +239,7 @@ class App extends Component {
       });
       this.showDialog();
     } else {
-      this.loginFirstDialog();
+      this.confirmationDialog('You need to login first.');
     }
   }
 
@@ -281,7 +283,6 @@ class App extends Component {
       textInput.blur();
     } else if (e.keyCode === 13) {
       // Perform search
-      console.log('Perform Search');
       textInput.blur();
     }
   }

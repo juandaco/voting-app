@@ -8,6 +8,7 @@ const PollChart = ({ pollTitle, chartData }) => {
       expand
       style={{
         color: '#000',
+        marginTop: -40,
       }}
     >
       <div>
@@ -15,6 +16,7 @@ const PollChart = ({ pollTitle, chartData }) => {
         <Doughnut
           data={chartData}
           height={310}
+          width={280}
           options={{
             maintainAspectRatio: true,
             animation: false, // for Mobile??? */

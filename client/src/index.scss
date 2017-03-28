@@ -15,7 +15,17 @@ dialog {
 
 // For Share Button
 .mdl-button--icon {
-  position: absolute;
-  right: 5px;
-  top: 5px;
+  float: right;
+
+  margin-top: 5px;
+}
+
+.mdl-badge[data-badge]:after {
+  font-size: 12px;
+
+  top: -11px;
+  right: -18px;
+
+  width: 17px;
+  height: 17px;
 }

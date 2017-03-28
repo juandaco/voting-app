@@ -71,9 +71,9 @@ class PollCard extends Component {
   setUpDeleteButton() {
     if (this.props.userActive) {
       return {
-        position: 'absolute',
-        right: 38,
-        top: 5,
+        float: 'right',
+        marginTop: 5,
+        marginRight: 5,
       };
     } else {
       return { display: 'none' };
@@ -133,13 +133,15 @@ class PollCard extends Component {
           marginBottom: 20,
           marginLeft: 20,
           marginRight: 20,
+          paddingLeft: 0,
           display: this.props.visible ? 'flex' : 'none',
         }}
       >
-
-        {/* Delete Button only visible for User Polls */}
-        <IconButton name="delete" style={deleteButton} />
-        <IconButton name="share" />
+        <div className='icon-container' style={{flexAlign: 'flex-end'}}>
+          {/* Delete Button only visible for User Polls */}
+          <IconButton name="delete" style={deleteButton} />
+          <IconButton name="share" />
+        </div>
 
         <PollChart
           pollTitle={this.props.pollData.pollTitle}

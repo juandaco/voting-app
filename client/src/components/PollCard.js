@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  CardActions,
-  Button,
-  Icon,
-  Menu,
-  MenuItem
-} from 'react-mdl';
+import { Card, CardActions, Button, Icon, Menu, MenuItem } from 'react-mdl';
 import PollChart from './PollChart';
 
 class PollCard extends Component {
@@ -14,7 +7,7 @@ class PollCard extends Component {
     super(props);
     this.state = {
       id: this.props.pollData.id,
-      chosen: this.props.pollData.options[0].name
+      chosen: this.props.pollData.options[0].name,
     };
 
     // Function Bindings
@@ -30,9 +23,9 @@ class PollCard extends Component {
     setTimeout(
       () =>
         this.setState({
-          chosen: option
+          chosen: option,
         }),
-      150
+      150,
     );
   }
 
@@ -80,7 +73,7 @@ class PollCard extends Component {
             '#1ABC9C',
             '#EB984E',
             '#AF7AC5',
-            '#CACFD2'
+            '#CACFD2',
           ],
           hoverBackgroundColor: [
             '#FF6384',
@@ -89,10 +82,10 @@ class PollCard extends Component {
             '#1ABC9C',
             '#EB984E',
             '#AF7AC5',
-            '#CACFD2'
-          ]
-        }
-      ]
+            '#CACFD2',
+          ],
+        },
+      ],
     };
   }
 
@@ -117,7 +110,8 @@ class PollCard extends Component {
           marginTop: 30,
           marginBottom: 20,
           marginLeft: 20,
-          marginRight: 20
+          marginRight: 20,
+          display: this.props.visible ? 'flex' : 'none',
         }}
       >
         <PollChart
@@ -129,7 +123,7 @@ class PollCard extends Component {
             style={{
               position: 'relative',
               display: 'inline-block',
-              float: 'left'
+              float: 'left',
             }}
           >
             <Button
@@ -157,7 +151,7 @@ class PollCard extends Component {
               display: 'inline-block',
               float: 'right',
               width: 40,
-              padding: 0
+              padding: 0,
             }}
           >
             Vote{' '}
@@ -169,7 +163,7 @@ class PollCard extends Component {
               display: 'inline-block',
               float: 'right',
               width: 100,
-              padding: 0
+              padding: 0,
             }}
           >
             New Option

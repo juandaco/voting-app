@@ -17,6 +17,7 @@ pollsRouter
     // Create a new Poll
     Polls.create(req.body, function(err, poll) {
       if (err) throw err;
+      // Add the created poll to the user
       Users.findOneAndUpdate(
         { _id: req.user._id },
         { $push: { polls: poll._id } },

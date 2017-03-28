@@ -279,37 +279,39 @@ class App extends Component {
   }
 
   setUpPollCards() {
-    if (Array.isArray(this.state.pollData))
-      return this.state.pollData
-        .filter(poll => {
-          return fuzzysearch(
-            this.state.searchValue.toLocaleLowerCase(),
-            poll.title.toLocaleLowerCase(),
+    if (Array.isArray(this.state.pollData)) {
+      return this.state.pollData.map(poll => {
+        let pollData = {
+          id: poll._id,
+          pollTitle: poll.title,
+          options: poll.options,
+        };
+        let userVisible = true;
+        userVisible = this.state.pollFilter.length
+          ? this.state.pollFilter.includes(poll._id)
+          : true;
+        let searchVisible = true;
+        if (this.state.searchValue) {
+          searchVisible = fuzzysearch(
+            this.state.searchValue.toLowerCase(),
+            poll.title.toLowerCase(),
           );
-        })
-        .filter(poll => {
-          if (this.state.pollFilter.length) {
-            return this.state.pollFilter.includes(poll._id);
-          }
-          return true;
-        })
-        .map(poll => {
-          let pollData = {
-            id: poll._id,
-            pollTitle: poll.title,
-            options: poll.options,
-          };
-          return (
-            <PollCard
-              key={poll._id}
-              userVote={this.userVote}
-              userVoteDialog={this.userVoteDialog}
-              newOptionDialog={this.newOptionDialog}
-              confirmationDialog={this.confirmationDialog}
-              pollData={pollData}
-            />
-          );
-        });
+        }
+        return (
+          <PollCard
+            key={poll._id}
+            userVote={this.userVote}
+            userVoteDialog={this.userVoteDialog}
+            newOptionDialog={this.newOptionDialog}
+            confirmationDialog={this.confirmationDialog}
+            pollData={pollData}
+            visible={userVisible && searchVisible}
+          />
+        );
+      });
+    } else {
+      return null;
+    }
   }
 
   render() {

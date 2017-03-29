@@ -22,6 +22,7 @@ const PollChart = ({ pollTitle, chartData }) => {
           data={chartData}
           height={310}
           width={280}
+          redraw
           options={{
             maintainAspectRatio: true,
             animation: false, // for Mobile??? */

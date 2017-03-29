@@ -21,7 +21,7 @@ class App extends Component {
       isUserAuth: false,
       username: '',
       userPolls: [],
-      pollFilter: [],
+      userVisible: false,
       pollData: [],
     };
     // Method Bindings
@@ -68,24 +68,36 @@ class App extends Component {
     });
   }
 
+  getUserPolls() {
+    ApiCalls.getUserPolls().then(resp => {
+      this.setState({
+        userPolls: resp.polls,
+      });
+    });
+  }
+
   createPoll(poll) {
     this.hideDialog();
     const pollValidation = poll.title !== '' &&
       poll.options !== '' &&
       /\n/g.test(poll.options);
     if (pollValidation) {
-      ApiCalls.newPoll(poll).then(result => {
-        if (result.errorMessage) {
-          this.confirmationDialog(result.errorMessage);
-          this.verifyUserSession();
-        } else {
-          this.getPolls();
-          if (this.state.pollFilter.length) {
-            this.showAllPolls();
-          } else {
-            this.showUserDashboard();
-          }
+      ApiCalls.newPoll(poll).then(poll => {
+        // No errors on the request
+        if (!poll.errorMessage) {
+          // Update pollData and userPolls
+          let newPollData = this.state.pollData.slice();
+          newPollData.push(poll);
+          let newUserPolls = this.state.userPolls.slice();
+          newUserPolls.push(poll._id);
+          this.setState({
+            pollData: newPollData,
+            userPolls: newUserPolls,
+          });
           this.confirmationDialog('Poll Created');
+        } else {
+          this.confirmationDialog(poll.errorMessage);
+          this.verifyUserSession();
         }
       });
     } else {
@@ -109,15 +121,34 @@ class App extends Component {
 
   showAllPolls() {
     this.setState({
-      pollFilter: [],
+      userVisible: false,
     });
     this.hideDrawer();
   }
 
   deletePoll() {
-    ApiCalls.deletePoll(this.state.currentPollID).then(resp => {
-      console.log(resp);
-      console.log('object');
+    ApiCalls.deletePoll(this.state.currentPollID).then(deletedPoll => {
+      // Remove from pollData
+      let newPollData = this.state.pollData.slice();
+      const indexOfPoll = newPollData.findIndex(
+        poll => poll._id === deletedPoll._id,
+      );
+      newPollData.splice(indexOfPoll, 1);
+      // Remove from userPolls
+      let newUserPolls = this.state.userPolls.slice();
+      const indexOfUserPoll = newUserPolls.findIndex(
+        poll => poll._id === deletedPoll._id,
+      );
+      newUserPolls.splice(indexOfUserPoll, 1);
+      // New State
+      this.setState({
+        pollData: newPollData,
+        userPolls: newUserPolls,
+      });
+      // Update View
+      if (this.state.userVisible) {
+        this.showUserDashboard();
+      }
     });
     this.hideDialog();
   }
@@ -126,17 +157,10 @@ class App extends Component {
     User Functions
   */
   showUserDashboard() {
-    if (this.state.isUserAuth) {
-      ApiCalls.getUserPolls().then(resp => {
-        this.setState({
-          pollFilter: resp.polls,
-          userPolls: resp.polls,
-        });
-        this.hideDrawer();
-      });
-    } else {
-      this.confirmationDialog('You need to login first.');
-    }
+    this.setState({
+      userVisible: true,
+    });
+    this.hideDrawer();
   }
 
   loginUser() {
@@ -177,25 +201,21 @@ class App extends Component {
   }
 
   verifyUserSession() {
-    ApiCalls.verifyUser()
-      .then(resp => {
-        if (resp.isUserAuth) {
-          // Set Authenticated State
-          this.setState({
-            isUserAuth: true,
-            username: resp.username,
-          });
-          this.showUserDashboard();
-          this.hideDrawer();
-        } else {
-          this.setState({
-            isUserAuth: false,
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    ApiCalls.verifyUser().then(resp => {
+      if (resp.isUserAuth) {
+        // Set Authenticated State
+        this.setState({
+          isUserAuth: true,
+          username: resp.username,
+        });
+        this.getUserPolls();
+        this.showUserDashboard();
+      } else {
+        this.setState({
+          isUserAuth: false,
+        });
+      }
+    });
   }
 
   userVote(chosen, id) {
@@ -331,8 +351,8 @@ class App extends Component {
           options: poll.options,
         };
         let userVisible = true;
-        userVisible = this.state.pollFilter.length
-          ? this.state.pollFilter.includes(poll._id)
+        userVisible = this.state.userVisible
+          ? this.state.userPolls.includes(poll._id)
           : true;
         let searchVisible = true;
         if (this.state.searchValue) {
@@ -341,7 +361,7 @@ class App extends Component {
             poll.title.toLowerCase(),
           );
         }
-        let userActive = this.state.userPolls.includes(poll._id);
+        let showDelete = this.state.userPolls.includes(poll._id);
         return (
           <PollCard
             key={poll._id}
@@ -351,7 +371,7 @@ class App extends Component {
             confirmationDialog={this.confirmationDialog}
             pollData={pollData}
             visible={userVisible && searchVisible}
-            userActive={userActive}
+            showDelete={showDelete}
             deletePollDialog={this.deletePollDialog}
           />
         );
@@ -369,12 +389,14 @@ class App extends Component {
         <Layout fixedHeader fixedDrawer>
 
           <MyHeader
-            title={this.state.pollFilter.length ? 'My Polls' : 'All Polls'}
+            title={this.state.userVisible ? 'My Polls' : 'All Polls'}
             searchValue={this.state.searchValue}
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
           />
 
+          !
+          {' '}
           <MyDrawer
             username={this.state.username}
             userPollCount={this.state.userPolls.length}

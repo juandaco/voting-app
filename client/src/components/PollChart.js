@@ -11,7 +11,12 @@ const PollChart = ({ pollTitle, chartData }) => {
         marginTop: -40,
       }}
     >
-      <div>
+      <div
+        style={{
+          width: 280,
+          height: 382,
+        }}
+      >
         <h4>{pollTitle}</h4>
         <Doughnut
           data={chartData}

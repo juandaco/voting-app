@@ -74,7 +74,7 @@ class PollCard extends Component {
   }
 
   setUpDeleteButton() {
-    if (this.props.userActive) {
+    if (this.props.showDelete) {
       return {
         float: 'right',
         marginTop: 5,

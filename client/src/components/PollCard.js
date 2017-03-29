@@ -127,7 +127,10 @@ class PollCard extends Component {
     let menuItems = this.setUpMenuItems(labels);
     let chartData = this.setUpData(labels, votes);
     let deleteButton = this.setUpDeleteButton();
-
+    let createdByDist = 5;
+    if (this.props.pollData.createdBy) {
+      createdByDist += this.props.pollData.createdBy.length;
+    }
     return (
       <Card
         shadow={2}
@@ -156,6 +159,18 @@ class PollCard extends Component {
           pollTitle={this.props.pollData.pollTitle}
           chartData={chartData}
         />
+
+        <p
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            right: createdByDist,
+            fontSize: 12,
+            color: 'rgb(189,189,189)',
+          }}
+        >
+          by {this.props.pollData.createdBy}
+        </p>
 
         <CardActions border>
           <div

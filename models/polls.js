@@ -15,7 +15,8 @@ const pollOptions = new Schema(
 const Poll = new Schema(
   {
     title: String,
-    options: [pollOptions]
+    options: [pollOptions],
+    createdBy: String,
   },
   {
     versionKey: false

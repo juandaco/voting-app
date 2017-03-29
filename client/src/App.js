@@ -78,6 +78,7 @@ class App extends Component {
 
   createPoll(poll) {
     this.hideDialog();
+    poll.createdBy = this.state.username;
     const pollValidation = poll.title !== '' &&
       poll.options !== '' &&
       /\n/g.test(poll.options);
@@ -136,9 +137,9 @@ class App extends Component {
       newPollData.splice(indexOfPoll, 1);
       // Remove from userPolls
       let newUserPolls = this.state.userPolls.slice();
-      const indexOfUserPoll = newUserPolls.findIndex(
-        poll => poll._id === deletedPoll._id,
-      );
+      const indexOfUserPoll = newUserPolls.findIndex(poll => {
+        return poll === deletedPoll._id;
+      });
       newUserPolls.splice(indexOfUserPoll, 1);
       // New State
       this.setState({
@@ -349,6 +350,7 @@ class App extends Component {
           id: poll._id,
           pollTitle: poll.title,
           options: poll.options,
+          createdBy: poll.createdBy,
         };
         let userVisible = true;
         userVisible = this.state.userVisible
@@ -395,8 +397,6 @@ class App extends Component {
             handleSearchKeys={this.handleSearchKeys}
           />
 
-          !
-          {' '}
           <MyDrawer
             username={this.state.username}
             userPollCount={this.state.userPolls.length}

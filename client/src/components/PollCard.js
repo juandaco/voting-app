@@ -22,7 +22,8 @@ class PollCard extends Component {
     this.newOptionHandler = this.newOptionHandler.bind(this);
     this.setUpMenuItems = this.setUpMenuItems.bind(this);
     this.voteHandler = this.voteHandler.bind(this);
-    this.setUpDeleteButton.bind(this);
+    this.setUpDeleteButton = this.setUpDeleteButton.bind(this);
+    this.deleteHandler = this.deleteHandler.bind(this);
   }
 
   handleMenuOptionClick(e) {
@@ -44,6 +45,10 @@ class PollCard extends Component {
 
   voteHandler() {
     this.props.userVote(this.state.chosen, this.state.id);
+  }
+
+  deleteHandler() {
+    this.props.deletePollDialog(this.state.id);
   }
 
   setUpMenuItems(labels) {
@@ -137,9 +142,13 @@ class PollCard extends Component {
           display: this.props.visible ? 'flex' : 'none',
         }}
       >
-        <div className='icon-container' style={{flexAlign: 'flex-end'}}>
+        <div className="icon-container" style={{ flexAlign: 'flex-end' }}>
           {/* Delete Button only visible for User Polls */}
-          <IconButton name="delete" style={deleteButton} />
+          <IconButton
+            name="delete"
+            onClick={this.deleteHandler}
+            style={deleteButton}
+          />
           <IconButton name="share" />
         </div>
 

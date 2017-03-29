@@ -74,6 +74,16 @@ function userLogout() {
     .then(parseJSON);
 }
 
+function deletePoll(id) {
+  return fetch(`/api/polls/${id}`, {
+    method: 'DELETE',
+    accept: 'application/json',
+    credentials: 'include',
+  })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
 /*
   Generic functions
 */
@@ -98,6 +108,7 @@ const ApiCalls = {
   getPoll,
   voteFor,
   newPoll,
+  deletePoll,
   verifyUser,
   userLogout,
 };

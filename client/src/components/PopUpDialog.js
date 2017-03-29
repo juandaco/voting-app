@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Textfield
+  Textfield,
 } from 'react-mdl';
 import dialogPolyfill from 'dialog-polyfill';
 
@@ -15,8 +15,8 @@ class PopUpDialog extends Component {
       newOption: '',
       newPoll: {
         title: '',
-        options: ''
-      }
+        options: '',
+      },
     };
 
     // Function Bindings
@@ -29,25 +29,23 @@ class PopUpDialog extends Component {
 
   handleNewOptionChange(e) {
     this.setState({
-      newOption: e.target.value
+      newOption: e.target.value,
     });
   }
 
   handlePollTitleChange(e) {
     let newPoll = this.state.newPoll;
     newPoll.title = e.target.value;
-
     this.setState({
-      newPoll
+      newPoll,
     });
   }
 
   handlePollOptionsChange(e) {
     let newPoll = this.state.newPoll;
     newPoll.options = e.target.value;
-
     this.setState({
-      newPoll
+      newPoll,
     });
   }
 
@@ -63,6 +61,7 @@ class PopUpDialog extends Component {
     const open = this.props.open;
     const cancel = this.props.cancel;
     const type = this.props.type;
+    const deletePoll = this.props.deletePoll;
     const confirmationText = this.props.confirmationText;
     // For registering the dialogs
     const dialogs = document.querySelector('dialog');
@@ -71,6 +70,7 @@ class PopUpDialog extends Component {
     let content;
     let buttons;
     switch (type) {
+
       case 'confirm':
         // Prop needed to change value of the property being created
         content = <p>{confirmationText}</p>;
@@ -80,6 +80,7 @@ class PopUpDialog extends Component {
           </Button>
         );
         break;
+
       case 'poll':
         content = (
           <div>
@@ -107,6 +108,7 @@ class PopUpDialog extends Component {
           </div>
         );
         break;
+
       case 'newOption':
         content = (
           <Textfield
@@ -126,10 +128,27 @@ class PopUpDialog extends Component {
           </div>
         );
         break;
-      case 'about':
+
+      case 'delete':
         content = (
-          <p>This Page was made by Syntart with for FreeCodeCamp</p>
+          <p>
+            Are you sure that you want to delete this poll? It can't be undone!!!
+          </p>
         );
+        buttons = (
+          <div>
+            <Button type="button" onClick={cancel}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={deletePoll}>
+              OK
+            </Button>
+          </div>
+        );
+        break;
+
+      case 'about':
+        content = <p>This Page was made by Syntart with for FreeCodeCamp</p>;
         buttons = (
           <Button type="button" onClick={cancel}>
             OK

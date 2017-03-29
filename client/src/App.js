@@ -45,6 +45,8 @@ class App extends Component {
     this.showAllPolls = this.showAllPolls.bind(this);
     this.aboutDialog = this.aboutDialog.bind(this);
     this.hideDrawer = this.hideDrawer.bind(this);
+    this.deletePollDialog = this.deletePollDialog.bind(this);
+    this.deletePoll = this.deletePoll.bind(this);
   }
 
   /*
@@ -77,8 +79,9 @@ class App extends Component {
           this.confirmationDialog(result.errorMessage);
           this.verifyUserSession();
         } else {
+          this.getPolls();
           if (this.state.pollFilter.length) {
-            this.getPolls();
+            this.showAllPolls();
           } else {
             this.showUserDashboard();
           }
@@ -109,6 +112,14 @@ class App extends Component {
       pollFilter: [],
     });
     this.hideDrawer();
+  }
+
+  deletePoll() {
+    ApiCalls.deletePoll(this.state.currentPollID).then(resp => {
+      console.log(resp);
+      console.log('object');
+    });
+    this.hideDialog();
   }
 
   /*
@@ -157,6 +168,7 @@ class App extends Component {
         username: '',
         userPolls: [],
         pollFilter: [],
+        searchValue: '',
       });
       this.hideDrawer();
       this.confirmationDialog(resp.logoutMessage);
@@ -270,6 +282,14 @@ class App extends Component {
     this.hideDrawer();
   }
 
+  deletePollDialog(pollID) {
+    this.setState({
+      currentPollID: pollID,
+      dialogType: 'delete',
+    });
+    this.showDialog();
+  }
+
   // Drawer Function
   hideDrawer() {
     // Hacky way to hide the Drawer after a successful Login
@@ -332,6 +352,7 @@ class App extends Component {
             pollData={pollData}
             visible={userVisible && searchVisible}
             userActive={userActive}
+            deletePollDialog={this.deletePollDialog}
           />
         );
       });
@@ -392,6 +413,7 @@ class App extends Component {
           createPoll={this.createPoll}
           createPollOption={this.createPollOption}
           currentPollID={this.state.currentPollID}
+          deletePoll={this.deletePoll}
         />
       </div>
     );

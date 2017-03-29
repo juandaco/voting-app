@@ -73,11 +73,19 @@ pollsRouter
       }
     });
   })
-  .delete(function(req, res, next) {
+  .delete(isLoggedIn, function(req, res, next) {
     // Delete a Poll, Verify Admin or User Posesion
-    Polls.findByIdAndRemove(req.params.pollId, function(err, resp) {
+    Polls.findByIdAndRemove(req.params.pollId, function(err, poll) {
       if (err) throw err;
-      res.json(resp);
+      // Remove poll from User ass well
+      Users.findOneAndUpdate(
+        { _id: req.user._id },
+        { $pull: { polls: poll._id } },
+        function(err, user) {
+          if (err) throw err;
+        }
+      );
+      res.json(poll);
     });
   });
 

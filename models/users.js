@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const User = new Schema({
   username: String,
-  githubID: String,
+  oauthService: String,
+  oauthServiceID: Number,
   name: String,
   voted: {
     type: Array,

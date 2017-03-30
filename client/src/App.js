@@ -160,7 +160,9 @@ class App extends Component {
         shareService = option.value;
       }
     });
-    const poll = this.state.pollData.find(poll => poll._id === this.state.currentPollID);
+    const poll = this.state.pollData.find(
+      poll => poll._id === this.state.currentPollID,
+    );
     let w;
     let h;
     // const appURL = `http://localhost:3000/polls/${poll._id}`;
@@ -239,20 +241,33 @@ class App extends Component {
   }
 
   loginUser() {
+    this.hideDialog();
     // Get Radio Buttons Value
-    const radioButtons = document.getElementsByName('shareService');
-    let shareService;
+    const radioButtons = document.getElementsByName('loginService');
+    let loginService;
     radioButtons.forEach(option => {
       if (option.checked) {
-        shareService = option.value;
+        loginService = option.value;
       }
     });
-    const w = 360;
-    const h = 560;
+    let w, h;
+    if (loginService === 'github') {
+      w = 360;
+      h = 560;
+    } else if (loginService === 'twitter') {
+      w = 360;
+      h = 560;
+    } else if (loginService === 'google') {
+      w = 360;
+      h = 560;
+    } else if (loginService === 'facebook') {
+      w = 360;
+      h = 560;
+    }
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
-    const authURL = `http://localhost:3001/auth/{${shareService}`;
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
+    const authURL = `http://localhost:3001/auth/${loginService}`;
     const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
     // For AutoClosing the popUp once we get an answer
     window.addEventListener(

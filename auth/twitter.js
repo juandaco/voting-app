@@ -1,17 +1,17 @@
 require('dotenv').config();
 const passport = require('passport');
-const GitHubStrategy = require('passport-github2').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const User = require('../models/users');
 const passportUserSetup = require('./passportUserSetup');
 
 passport.use(
-  new GitHubStrategy(
+  new TwitterStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL
+      consumerKey: process.env.TWITTER_CONSUMER_KEY,
+      consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+      callbackURL: process.env.TWITTER_CALLBACK_URL
     },
-    function(accessToken, refreshToken, profile, done) {
+    function(token, tokenSecret, profile, done) {
       const searchQuery = {
         oauthServiceID: profile.id
       };
@@ -19,8 +19,8 @@ passport.use(
       const updates = {
         username: profile.username,
         name: profile.displayName,
-        oauthService: 'Github',
-        oauthServiceID: profile.id,
+        oauthService: 'Twitter',
+        oauthServiceID: profile.id
       };
 
       const options = {

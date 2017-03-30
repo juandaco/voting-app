@@ -65,6 +65,7 @@ class PopUpDialog extends Component {
     const type = this.props.type;
     const deletePoll = this.props.deletePoll;
     const sharePoll = this.props.sharePoll;
+    const loginUser = this.props.loginUser;
     const confirmationText = this.props.confirmationText;
     // For registering the dialogs
     const dialogs = document.querySelector('dialog');
@@ -147,6 +148,18 @@ class PopUpDialog extends Component {
             >
               <Radio value="github">
                 <img
+                  src="./logos/github_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Github Logo"
+                />
+              </Radio>
+              <Radio value="twitter">
+                <img
                   src="./logos/twitter_logo.svg"
                   style={{
                     width: 35,
@@ -185,12 +198,12 @@ class PopUpDialog extends Component {
           </div>
         );
         buttons = (
-          <Button type="button" onClick={sharePoll}>
+          <Button type="button" onClick={loginUser}>
             OK
           </Button>
         );
         break;
-
+      
       case 'share':
         const tmpStyle = {
           lineHeight: '60px',

@@ -7,7 +7,7 @@ const MyDrawer = (
     userPollCount,
     showUserDashboard,
     showAllPolls,
-    loginUser,
+    loginDialog,
     logoutUser,
     aboutDialog,
   },
@@ -19,7 +19,7 @@ const MyDrawer = (
 
         <div
           style={username ? null : divPointer}
-          onClick={username ? null : loginUser}
+          onClick={username ? null : loginDialog}
         >
           <Icon name="account_circle" />
           <span className="drawer-link">{username || 'Login'}</span>

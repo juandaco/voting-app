@@ -5,6 +5,10 @@ body {
   // user-select: none;
 }
 
+canvas {
+  user-select: none;
+}
+
 .drawer-link {
   margin-left: 20px;
 }

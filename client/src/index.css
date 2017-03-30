@@ -3,6 +3,9 @@ html,
 body {
   font-family: 'Roboto', 'Helvetica', sans-serif !important; }
 
+canvas {
+  user-select: none; }
+
 .drawer-link {
   margin-left: 20px; }
 

@@ -53,7 +53,7 @@ class PollCard extends Component {
   }
 
   shareHandler() {
-    this.props.sharePoll(this.state.id);
+    this.props.shareDialog(this.state.id);
   }
 
   setUpMenuItems(labels) {
@@ -157,7 +157,7 @@ class PollCard extends Component {
             onClick={this.deleteHandler}
             style={deleteButton}
           />
-          <IconButton name="share" onClick={this.shareHandler}/>
+          <IconButton name="share" onClick={this.shareHandler} />
         </div>
 
         <PollChart
@@ -187,7 +187,7 @@ class PollCard extends Component {
           >
             <Button
               id={`vote-menu${this.state.id}`}
-              style={{ width: 130, fontSize: 13, fontWeight: 500 }}
+              style={{ width: 130, fontSize: 13, fontWeight: 500, padding: '0 10px'}}
             >
               {chosen}
               <Icon
@@ -214,7 +214,7 @@ class PollCard extends Component {
               fontWeight: 500,
             }}
           >
-            Vote{' '}
+            Vote
           </Button>
           <Button
             colored

@@ -5,6 +5,8 @@ import {
   DialogActions,
   Button,
   Textfield,
+  RadioGroup,
+  Radio,
 } from 'react-mdl';
 import dialogPolyfill from 'dialog-polyfill';
 
@@ -62,6 +64,7 @@ class PopUpDialog extends Component {
     const cancel = this.props.cancel;
     const type = this.props.type;
     const deletePoll = this.props.deletePoll;
+    const sharePoll = this.props.sharePoll;
     const confirmationText = this.props.confirmationText;
     // For registering the dialogs
     const dialogs = document.querySelector('dialog');
@@ -70,7 +73,6 @@ class PopUpDialog extends Component {
     let content;
     let buttons;
     switch (type) {
-
       case 'confirm':
         // Prop needed to change value of the property being created
         content = <p>{confirmationText}</p>;
@@ -126,6 +128,126 @@ class PopUpDialog extends Component {
               New
             </Button>
           </div>
+        );
+        break;
+
+      case 'login':
+        const tmp2Style = {
+          lineHeight: '60px',
+        };
+        content = (
+          <div>
+            <p>Login with:</p>
+            <RadioGroup
+              container="ul"
+              childContainer="li"
+              name="loginService"
+              style={tmp2Style}
+              value="github"
+            >
+              <Radio value="github">
+                <img
+                  src="./logos/twitter_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Twitter Logo"
+                />
+              </Radio>
+              <Radio value="google">
+                <img
+                  src="./logos/google_plus_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Google Plus Logo"
+                />
+              </Radio>
+              <Radio value="facebook">
+                <img
+                  src="./logos/facebook_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Facebook Logo"
+                />
+              </Radio>
+            </RadioGroup>
+          </div>
+        );
+        buttons = (
+          <Button type="button" onClick={sharePoll}>
+            OK
+          </Button>
+        );
+        break;
+
+      case 'share':
+        const tmpStyle = {
+          lineHeight: '60px',
+        };
+        content = (
+          <div>
+            <p>Share with:</p>
+            <RadioGroup
+              container="ul"
+              childContainer="li"
+              name="shareService"
+              style={tmpStyle}
+              value="twitter"
+            >
+              <Radio value="twitter">
+                <img
+                  src="./logos/twitter_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Twitter Logo"
+                />
+              </Radio>
+              <Radio value="google">
+                <img
+                  src="./logos/google_plus_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Google Plus Logo"
+                />
+              </Radio>
+              <Radio value="facebook">
+                <img
+                  src="./logos/facebook_logo.svg"
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginTop: -7,
+                    marginLeft: 10,
+                  }}
+                  alt="Facebook Logo"
+                />
+              </Radio>
+            </RadioGroup>
+          </div>
+        );
+        buttons = (
+          <Button type="button" onClick={sharePoll}>
+            OK
+          </Button>
         );
         break;
 

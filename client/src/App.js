@@ -22,32 +22,41 @@ class App extends Component {
       username: '',
       userPolls: [],
       userVisible: false,
+      sharedPoll: '',
       pollData: [],
     };
+
     // Method Bindings
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.handleSearchKeys = this.handleSearchKeys.bind(this);
-    this.showDialog = this.showDialog.bind(this);
-    this.hideDialog = this.hideDialog.bind(this);
-    this.confirmationDialog = this.confirmationDialog.bind(this);
-    this.newOptionDialog = this.newOptionDialog.bind(this);
-    this.pollDialog = this.pollDialog.bind(this);
-    this.createPoll = this.createPoll.bind(this);
-    this.userVoteDialog = this.userVoteDialog.bind(this);
-    this.showUserDashboard = this.showUserDashboard.bind(this);
-    this.getPolls = this.getPolls.bind(this);
-    this.createPollOption = this.createPollOption.bind(this);
-    this.loginUser = this.loginUser.bind(this);
-    this.logoutUser = this.logoutUser.bind(this);
-    this.setUpPollCards = this.setUpPollCards.bind(this);
-    this.userVote = this.userVote.bind(this);
-    this.verifyUserSession = this.verifyUserSession.bind(this);
-    this.showAllPolls = this.showAllPolls.bind(this);
-    this.aboutDialog = this.aboutDialog.bind(this);
-    this.hideDrawer = this.hideDrawer.bind(this);
-    this.deletePollDialog = this.deletePollDialog.bind(this);
-    this.deletePoll = this.deletePoll.bind(this);
-    this.sharePoll = this.sharePoll.bind(this);
+    {
+      // eslint-disable-line
+      this.handleSearchChange = this.handleSearchChange.bind(this);
+      this.handleSearchKeys = this.handleSearchKeys.bind(this);
+      this.showDialog = this.showDialog.bind(this);
+      this.hideDialog = this.hideDialog.bind(this);
+      this.confirmationDialog = this.confirmationDialog.bind(this);
+      this.newOptionDialog = this.newOptionDialog.bind(this);
+      this.pollDialog = this.pollDialog.bind(this);
+      this.createPoll = this.createPoll.bind(this);
+      this.userVoteDialog = this.userVoteDialog.bind(this);
+      this.showUserDashboard = this.showUserDashboard.bind(this);
+      this.getPolls = this.getPolls.bind(this);
+      this.createPollOption = this.createPollOption.bind(this);
+      this.loginUser = this.loginUser.bind(this);
+      this.logoutUser = this.logoutUser.bind(this);
+      this.setUpPollCards = this.setUpPollCards.bind(this);
+      this.userVote = this.userVote.bind(this);
+      this.verifyUserSession = this.verifyUserSession.bind(this);
+      this.showAllPolls = this.showAllPolls.bind(this);
+      this.aboutDialog = this.aboutDialog.bind(this);
+      this.hideDrawer = this.hideDrawer.bind(this);
+      this.deletePollDialog = this.deletePollDialog.bind(this);
+      this.deletePoll = this.deletePoll.bind(this);
+      this.sharePoll = this.sharePoll.bind(this);
+      this.scrollContentToTop = this.scrollContentToTop.bind(this);
+      this.setupTitle = this.setupTitle.bind(this);
+      this.shareDialog = this.shareDialog.bind(this);
+      this.loginDialog = this.loginDialog.bind(this);
+    }
   }
 
   /*
@@ -56,6 +65,13 @@ class App extends Component {
   componentWillMount() {
     this.getPolls();
     this.verifyUserSession();
+    // Get PollID from the URL
+    const pollID = window.location.pathname.slice(7);
+    if (pollID) {
+      this.setState({
+        sharedPoll: pollID,
+      });
+    }
   }
 
   /*
@@ -121,28 +137,39 @@ class App extends Component {
     });
   }
 
-  showAllPolls() {
+  showAllPolls(e) {
+    // If User Clicked
+    if (e) {
+      window.history.pushState({}, 'Voting App', 'http://localhost:3000');
+      this.setState({ sharedPoll: '' });
+    }
     this.setState({
       userVisible: false,
     });
     this.hideDrawer();
+    this.scrollContentToTop();
   }
 
-  sharePoll(id) {
-    const poll = this.state.pollData.find(poll => poll._id === id);
-    let shareService = 'google';
+  sharePoll() {
+    this.hideDialog();
+    // Get Radio Buttons Value
+    const buttons = document.getElementsByName('shareService');
+    let shareService;
+    buttons.forEach(option => {
+      if (option.checked) {
+        shareService = option.value;
+      }
+    });
+    const poll = this.state.pollData.find(poll => poll._id === this.state.currentPollID);
     let w;
     let h;
+    // const appURL = `http://localhost:3000/polls/${poll._id}`;
     const appURL = 'http://www.freecodecamp.com';
     let shareURL;
-
     if (shareService === 'facebook') {
-      FB.ui({ // eslint-disable-line
-        method: 'share',
-        display: 'popup',
-        quote: poll.title,
-        href: 'https://developers.facebook.com/docs/',
-      });
+      h = 276;
+      w = 550;
+      shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appURL)}`;
     } else if (shareService === 'twitter') {
       // Twitter Web Intent
       h = 276;
@@ -192,19 +219,39 @@ class App extends Component {
   /*
     User Functions
   */
-  showUserDashboard() {
-    this.setState({
-      userVisible: true,
-    });
+  showUserDashboard(e) {
+    // Verify if User Clicked
+    if (e) {
+      window.history.pushState({}, 'Voting App', 'http://localhost:3000');
+      this.setState({
+        sharedPoll: '',
+        userVisible: true,
+      });
+    }
+    // Set User Visible only when not displaying a particular Poll
+    if (!this.state.sharedPoll) {
+      this.setState({
+        userVisible: true,
+      });
+    }
     this.hideDrawer();
+    this.scrollContentToTop();
   }
 
   loginUser() {
+    // Get Radio Buttons Value
+    const radioButtons = document.getElementsByName('shareService');
+    let shareService;
+    radioButtons.forEach(option => {
+      if (option.checked) {
+        shareService = option.value;
+      }
+    });
     const w = 360;
     const h = 560;
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
-    const authURL = 'http://localhost:3001/auth/github';
+    const authURL = `http://localhost:3001/auth/{${shareService}`;
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
     const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
     // For AutoClosing the popUp once we get an answer
@@ -346,7 +393,24 @@ class App extends Component {
     this.showDialog();
   }
 
-  // Drawer Function
+  shareDialog(pollID) {
+    this.setState({
+      currentPollID: pollID,
+      dialogType: 'share',
+    });
+    this.showDialog();
+  }
+
+  loginDialog() {
+    this.setState({
+      dialogType: 'login',
+    });
+    this.showDialog();
+  }
+
+  /*
+    UI Functions
+  */
   hideDrawer() {
     // Hacky way to hide the Drawer after a successful Login
     const drawer = document.getElementsByClassName('mdl-layout__drawer')[0];
@@ -354,6 +418,24 @@ class App extends Component {
     drawer.setAttribute('aria-hidden', true);
     const obfus = document.getElementsByClassName('mdl-layout__obfuscator')[0];
     obfus.classList.remove('is-visible');
+  }
+
+  scrollContentToTop() {
+    const content = document.getElementsByClassName('mdl-layout__content')[0];
+    content.scrollTop = 0;
+  }
+
+  setupTitle() {
+    let title;
+    if (this.state.sharedPoll && this.state.pollData.length) {
+      const poll = this.state.pollData.find(
+        poll => poll._id === this.state.sharedPoll,
+      );
+      title = poll.title;
+    } else {
+      title = this.state.userVisible ? 'My Polls' : 'All Polls';
+    }
+    return title;
   }
 
   /*
@@ -398,6 +480,8 @@ class App extends Component {
             poll.title.toLowerCase(),
           );
         }
+        let sharedVisible = !this.state.sharedPoll;
+        if (poll._id === this.state.sharedPoll) sharedVisible = true;
         let showDelete = this.state.userPolls.includes(poll._id);
         return (
           <PollCard
@@ -407,9 +491,9 @@ class App extends Component {
             newOptionDialog={this.newOptionDialog}
             confirmationDialog={this.confirmationDialog}
             pollData={pollData}
-            visible={userVisible && searchVisible}
+            visible={userVisible && searchVisible && sharedVisible}
             showDelete={showDelete}
-            sharePoll={this.sharePoll}
+            shareDialog={this.shareDialog}
             deletePollDialog={this.deletePollDialog}
           />
         );
@@ -420,14 +504,12 @@ class App extends Component {
   }
 
   render() {
-    let pollCards = this.setUpPollCards();
-
     return (
       <div style={{ height: '100vh', position: 'relative' }}>
         <Layout fixedHeader fixedDrawer>
 
           <MyHeader
-            title={this.state.userVisible ? 'My Polls' : 'All Polls'}
+            title={this.setupTitle()}
             searchValue={this.state.searchValue}
             handleSearchChange={this.handleSearchChange}
             handleSearchKeys={this.handleSearchKeys}
@@ -438,7 +520,7 @@ class App extends Component {
             userPollCount={this.state.userPolls.length}
             showUserDashboard={this.showUserDashboard}
             showAllPolls={this.showAllPolls}
-            loginUser={this.loginUser}
+            loginDialog={this.loginDialog}
             logoutUser={this.logoutUser}
             aboutDialog={this.aboutDialog}
           />
@@ -451,7 +533,7 @@ class App extends Component {
               justifyContent: 'center',
             }}
           >
-            {pollCards}
+            {this.setUpPollCards()}
             <FABButton
               colored
               accent
@@ -471,6 +553,8 @@ class App extends Component {
           createPoll={this.createPoll}
           createPollOption={this.createPollOption}
           currentPollID={this.state.currentPollID}
+          sharePoll={this.sharePoll}
+          loginUser={this.loginUser}
           deletePoll={this.deletePoll}
         />
       </div>

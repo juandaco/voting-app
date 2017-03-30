@@ -47,6 +47,7 @@ class App extends Component {
     this.hideDrawer = this.hideDrawer.bind(this);
     this.deletePollDialog = this.deletePollDialog.bind(this);
     this.deletePoll = this.deletePoll.bind(this);
+    this.sharePoll = this.sharePoll.bind(this);
   }
 
   /*
@@ -125,6 +126,40 @@ class App extends Component {
       userVisible: false,
     });
     this.hideDrawer();
+  }
+
+  sharePoll(id) {
+    const poll = this.state.pollData.find(poll => poll._id === id);
+    let shareService = 'google';
+    let w;
+    let h;
+    const appURL = 'http://www.freecodecamp.com';
+    let shareURL;
+
+    if (shareService === 'facebook') {
+      FB.ui({ // eslint-disable-line
+        method: 'share',
+        display: 'popup',
+        quote: poll.title,
+        href: 'https://developers.facebook.com/docs/',
+      });
+    } else if (shareService === 'twitter') {
+      // Twitter Web Intent
+      h = 276;
+      w = 550;
+      const tweetText = `Check out this cool Poll: "${poll.title}"`;
+      const hashtags = ['FreeCodeCamp', 'VotingApp', 'Pollster'];
+      shareURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=${hashtags.join(',')}&url=${appURL}`;
+    } else if (shareService === 'google') {
+      // Google Plus share
+      w = 400;
+      h = 520;
+      shareURL = `https://plus.google.com/share?url=${appURL}`;
+    }
+    const left = screen.width / 2 - w / 2;
+    const top = screen.height / 2 - h / 2;
+    const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
+    window.open(shareURL, 'Voting Tweet', windowOptions);
   }
 
   deletePoll() {
@@ -374,6 +409,7 @@ class App extends Component {
             pollData={pollData}
             visible={userVisible && searchVisible}
             showDelete={showDelete}
+            sharePoll={this.sharePoll}
             deletePollDialog={this.deletePollDialog}
           />
         );

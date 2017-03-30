@@ -24,6 +24,7 @@ class PollCard extends Component {
     this.voteHandler = this.voteHandler.bind(this);
     this.setUpDeleteButton = this.setUpDeleteButton.bind(this);
     this.deleteHandler = this.deleteHandler.bind(this);
+    this.shareHandler = this.shareHandler.bind(this);
   }
 
   handleMenuOptionClick(e) {
@@ -49,6 +50,10 @@ class PollCard extends Component {
 
   deleteHandler() {
     this.props.deletePollDialog(this.state.id);
+  }
+
+  shareHandler() {
+    this.props.sharePoll(this.state.id);
   }
 
   setUpMenuItems(labels) {
@@ -152,7 +157,7 @@ class PollCard extends Component {
             onClick={this.deleteHandler}
             style={deleteButton}
           />
-          <IconButton name="share" />
+          <IconButton name="share" onClick={this.shareHandler}/>
         </div>
 
         <PollChart

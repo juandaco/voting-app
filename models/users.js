@@ -6,10 +6,6 @@ const User = new Schema({
   oauthService: String,
   oauthServiceID: Number,
   name: String,
-  voted: {
-    type: Array,
-    default: [],
-  },
   polls: {
     type: Array,
     default: []

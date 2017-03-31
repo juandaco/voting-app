@@ -198,12 +198,17 @@ class PopUpDialog extends Component {
           </div>
         );
         buttons = (
-          <Button type="button" onClick={loginUser}>
-            OK
-          </Button>
+          <div>
+            <Button type="button" onClick={cancel}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={loginUser}>
+              OK
+            </Button>
+          </div>
         );
         break;
-      
+
       case 'share':
         const tmpStyle = {
           lineHeight: '60px',
@@ -258,9 +263,14 @@ class PopUpDialog extends Component {
           </div>
         );
         buttons = (
-          <Button type="button" onClick={sharePoll}>
-            OK
-          </Button>
+          <div>
+            <Button type="button" onClick={cancel}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={sharePoll}>
+              OK
+            </Button>
+          </div>
         );
         break;
 

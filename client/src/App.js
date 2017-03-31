@@ -253,15 +253,15 @@ class App extends Component {
     let w, h;
     if (loginService === 'github') {
       w = 360;
-      h = 560;
+      h = 570;
     } else if (loginService === 'twitter') {
       w = 360;
       h = 560;
     } else if (loginService === 'google') {
-      w = 360;
-      h = 560;
+      w = 460;
+      h = 300;
     } else if (loginService === 'facebook') {
-      w = 360;
+      w = 622;
       h = 560;
     }
     const left = screen.width / 2 - w / 2;

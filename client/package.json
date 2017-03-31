@@ -11,6 +11,7 @@
     "fuzzysearch": "^1.0.3",
     "react": "^15.4.2",
     "react-chartjs-2": "^2.0.0",
+    "react-delay": "0.0.3",
     "react-dom": "^15.4.2",
     "react-mdl": "^1.9.0",
     "react-redux": "^5.0.3",

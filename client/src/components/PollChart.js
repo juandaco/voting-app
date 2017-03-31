@@ -13,18 +13,15 @@ const PollChart = ({ pollTitle, chartData }) => {
     >
       <div
         style={{
-          width: 280,
-          height: 382,
+          marginLeft: -5,
         }}
       >
-        <h4>{pollTitle}</h4>
+        <h4 style={{ marginLeft: 10 }}>{pollTitle}</h4>
         <Doughnut
           data={chartData}
-          height={310}
-          width={280}
-          redraw
+          height={260}
+          width={260}
           options={{
-            maintainAspectRatio: true,
             animation: false, // for Mobile??? */
           }}
         />

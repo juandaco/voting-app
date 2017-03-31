@@ -132,16 +132,13 @@ class PollCard extends Component {
     let menuItems = this.setUpMenuItems(labels);
     let chartData = this.setUpData(labels, votes);
     let deleteButton = this.setUpDeleteButton();
-    let createdByDist = 5;
-    if (this.props.pollData.createdBy) {
-      createdByDist += this.props.pollData.createdBy.length;
-    }
+
     return (
       <Card
         shadow={2}
         style={{
-          width: 310,
-          height: 470,
+          width: 280,
+          height: 440,
           marginTop: 30,
           marginBottom: 20,
           marginLeft: 20,
@@ -167,10 +164,11 @@ class PollCard extends Component {
 
         <p
           style={{
-            position: 'absolute',
-            bottom: 40,
-            right: createdByDist,
+            alignSelf: 'flex-end',
             fontSize: 12,
+            height: 8,
+            marginTop: -20,
+            marginRight: 8,
             color: 'rgb(189,189,189)',
           }}
         >
@@ -214,7 +212,7 @@ class PollCard extends Component {
             style={{
               display: 'inline-block',
               float: 'right',
-              width: 40,
+              width: 30,
               padding: 0,
               fontWeight: 500,
             }}
@@ -227,12 +225,12 @@ class PollCard extends Component {
             style={{
               display: 'inline-block',
               float: 'right',
-              width: 100,
+              width: 30,
               padding: 0,
               fontWeight: 500,
             }}
           >
-            New Option
+            New
           </Button>
         </CardActions>
       </Card>

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Layout, Content, Icon, FABButton } from 'react-mdl';
 import fuzzysearch from 'fuzzysearch';
+import Delay from 'react-delay'; // To fix Chart.js Bugs
 // My Components
 import MyHeader from './components/MyHeader';
 import MyDrawer from './components/MyDrawer';
@@ -338,7 +339,10 @@ class App extends Component {
           userID: resp.userID,
         });
         this.getUserPolls();
-        this.showUserDashboard();
+        // Bug Fix for React Chart.js not showing Canvas
+        setTimeout(() => {
+          this.showUserDashboard();
+        }, 300);
       } else {
         this.setState({
           isUserAuth: false,
@@ -551,18 +555,21 @@ class App extends Component {
         if (poll._id === this.state.sharedPoll) sharedVisible = true;
         let showDelete = this.state.userPolls.includes(poll._id);
         return (
-          <PollCard
-            key={poll._id}
-            userVote={this.userVote}
-            userVoteDialog={this.userVoteDialog}
-            newOptionDialog={this.newOptionDialog}
-            confirmationDialog={this.confirmationDialog}
-            pollData={pollData}
-            visible={userVisible && searchVisible && sharedVisible}
-            showDelete={showDelete}
-            shareDialog={this.shareDialog}
-            deletePollDialog={this.deletePollDialog}
-          />
+          // The manual Delay fixes a bug in Chart.js
+          <Delay wait={150} key={poll._id}>
+            <PollCard
+              key={poll._id}
+              userVote={this.userVote}
+              userVoteDialog={this.userVoteDialog}
+              newOptionDialog={this.newOptionDialog}
+              confirmationDialog={this.confirmationDialog}
+              pollData={pollData}
+              visible={userVisible && searchVisible && sharedVisible}
+              showDelete={showDelete}
+              shareDialog={this.shareDialog}
+              deletePollDialog={this.deletePollDialog}
+            />
+          </Delay>
         );
       });
     } else {
@@ -601,6 +608,20 @@ class App extends Component {
             }}
           >
             {this.setUpPollCards()}
+            {this.state.userPolls.length === 0 && this.state.userVisible
+              ? <Delay wait={250}>
+                  <h4
+                    style={{
+                      marginTop: 200,
+                      lineHeight: 1.6,
+                      textAlign: 'center',
+                      color: 'rgba(128, 128, 128, 0.64)',
+                    }}
+                  >
+                    You don't have any polls!
+                  </h4>
+                </Delay>
+              : null}
             <FABButton
               colored
               accent

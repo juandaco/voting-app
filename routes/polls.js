@@ -78,7 +78,7 @@ pollsRouter
     // Delete a Poll, Verify Admin or User Posesion
     Polls.findByIdAndRemove(req.params.pollId, function(err, poll) {
       if (err) throw err;
-      // Remove poll from User ass well
+      // Remove poll from User as well
       Users.findOneAndUpdate(
         { _id: req.user._id },
         { $pull: { polls: poll._id } },

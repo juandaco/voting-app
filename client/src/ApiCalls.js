@@ -23,14 +23,15 @@ function getPoll(id) {
     .then(parseJSON);
 }
 
-function voteFor(option, id) {
-  const request = new Request(`/api/polls/${id}`, {
+function voteFor(option, pollID, userIdentifier) {
+  const request = new Request(`/api/polls/${pollID}`, {
     method: 'PUT',
     headers: new Headers({
       'Content-Type': 'application/json',
     }),
     body: JSON.stringify({
       name: option,
+      userIdentifier,
     }),
     credentials: 'include',
   });
@@ -38,13 +39,6 @@ function voteFor(option, id) {
 }
 
 function newPoll(poll) {
-  poll.options = poll.options.split(/\n/).map(option => {
-    return {
-      name: option,
-      votes: 0,
-    };
-  });
-
   const request = new Request(`/api/polls/`, {
     method: 'POST',
     headers: new Headers({
@@ -54,6 +48,14 @@ function newPoll(poll) {
     credentials: 'include',
   });
   return fetch(request).then(checkStatus).then(parseJSON);
+}
+
+function getIP() {
+  return fetch(`https://api.ipify.org?format=json`, {
+    accept: 'application/json',
+  })
+    .then(checkStatus)
+    .then(parseJSON);
 }
 
 function verifyUser() {
@@ -109,6 +111,7 @@ const ApiCalls = {
   voteFor,
   newPoll,
   deletePoll,
+  getIP,
   verifyUser,
   userLogout,
 };

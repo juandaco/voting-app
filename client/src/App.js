@@ -1,3 +1,5 @@
+/* eslint-disable no-lone-blocks */
+
 import React, { Component } from 'react';
 import { Layout, Content, Icon, FABButton } from 'react-mdl';
 import fuzzysearch from 'fuzzysearch';
@@ -20,6 +22,8 @@ class App extends Component {
       currentPollID: '',
       isUserAuth: false,
       username: '',
+      userID: '',
+      userIP: '',
       userPolls: [],
       userVisible: false,
       sharedPoll: '',
@@ -28,7 +32,6 @@ class App extends Component {
 
     // Method Bindings
     {
-      // eslint-disable-line
       this.handleSearchChange = this.handleSearchChange.bind(this);
       this.handleSearchKeys = this.handleSearchKeys.bind(this);
       this.showDialog = this.showDialog.bind(this);
@@ -56,15 +59,17 @@ class App extends Component {
       this.setupTitle = this.setupTitle.bind(this);
       this.shareDialog = this.shareDialog.bind(this);
       this.loginDialog = this.loginDialog.bind(this);
+      this.getUserIP = this.getUserIP.bind(this);
     }
   }
 
   /*
     Lifecycle Hooks
   */
-  componentWillMount() {
+  componentDidMount() {
     this.getPolls();
     this.verifyUserSession();
+    this.getUserIP();
     // Get PollID from the URL
     const pollID = window.location.pathname.slice(7);
     if (pollID) {
@@ -95,11 +100,26 @@ class App extends Component {
 
   createPoll(poll) {
     this.hideDialog();
-    poll.createdBy = this.state.username;
-    const pollValidation = poll.title !== '' &&
-      poll.options !== '' &&
-      /\n/g.test(poll.options);
+    // Poll validation: Not Empty and at least 2 options
+    poll.options = poll.options
+      .split(/\n/)
+      .filter((option, index, self) => {
+        // Remove Empty lines and Duplicates
+        if (option.trim()) {
+          // Not empty line
+          return self.indexOf(option) === index;
+        }
+        return false;
+      })
+      .map(option => {
+        return {
+          name: option.trim(),
+          votes: 0,
+        };
+      });
+    const pollValidation = poll.title !== '' && poll.options.length >= 2;
     if (pollValidation) {
+      poll.createdBy = this.state.username;
       ApiCalls.newPoll(poll).then(poll => {
         // No errors on the request
         if (!poll.errorMessage) {
@@ -288,6 +308,7 @@ class App extends Component {
       this.setState({
         isUserAuth: false,
         username: '',
+        userID: '',
         userPolls: [],
         pollFilter: [],
         searchValue: '',
@@ -298,6 +319,15 @@ class App extends Component {
     });
   }
 
+  getUserIP() {
+    // Get IP
+    ApiCalls.getIP().then(resp => {
+      this.setState({
+        userIP: resp.ip,
+      });
+    });
+  }
+
   verifyUserSession() {
     ApiCalls.verifyUser().then(resp => {
       if (resp.isUserAuth) {
@@ -305,6 +335,7 @@ class App extends Component {
         this.setState({
           isUserAuth: true,
           username: resp.username,
+          userID: resp.userID,
         });
         this.getUserPolls();
         this.showUserDashboard();
@@ -316,29 +347,50 @@ class App extends Component {
     });
   }
 
-  userVote(chosen, id) {
+  userVote(chosen, pollID) {
+    // Get a Particular Poll with its Index
     let pollIndex;
     let poll = this.state.pollData.find((poll, i) => {
       pollIndex = i;
-      return id === poll._id;
+      return poll._id === pollID;
     });
-    let optionIndex = poll.options.findIndex(option => {
-      return option.name === chosen;
-    });
-    let newData = this.state.pollData.slice();
-    newData[pollIndex].options[optionIndex].votes++;
-    ApiCalls.voteFor(chosen, id)
-      .then(results => {
-        this.setState({
-          pollData: newData,
-        });
-        this.userVoteDialog(chosen);
-      })
-      .catch(err => {
-        this.confirmationDialog(
-          'There was an error with your vote, please try again',
-        );
+    // Find out if User or IP voted
+    let userVoted = false;
+    this.state.isUserAuth
+      ? // User Logged
+        (userVoted = poll.votedBy.includes(this.state.userID))
+      : // No user, check the IP
+        (userVoted = poll.votedBy.includes(this.state.userIP));
+    if (!userVoted) {
+      let optionIndex = poll.options.findIndex(option => {
+        return option.name === chosen;
       });
+      // Copy pollData to avoid Mutations
+      let newData = this.state.pollData.slice();
+      // Actual Vote
+      newData[pollIndex].options[optionIndex].votes++;
+      // Add the User to votedBy
+      this.state.isUserAuth
+        ? newData[pollIndex].votedBy.push(this.state.userID)
+        : newData[pollIndex].votedBy.push(this.state.userIP);
+      // Request Database Modification
+      const identifier = this.state.userID || this.state.userIP;
+      ApiCalls.voteFor(chosen, pollID, identifier)
+        .then(results => {
+          // Modify the State when successful
+          this.setState({
+            pollData: newData,
+          });
+          this.userVoteDialog(chosen);
+        })
+        .catch(err => {
+          this.confirmationDialog(
+            'There was an error with your vote, please try again',
+          );
+        });
+    } else {
+      this.confirmationDialog('You already voted in this Poll');
+    }
   }
 
   /*

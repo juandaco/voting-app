@@ -39,7 +39,7 @@ pollsRouter
     });
   })
   // Update a Poll
-  .put(isLoggedIn, function(req, res, next) {
+  .put(function(req, res, next) {
     Polls.findById(req.params.pollId, function(err, poll) {
       if (err) throw err;
       // Find out if option exists
@@ -52,7 +52,8 @@ pollsRouter
           break;
         }
       }
-
+      // Add the user to the record
+      poll.votedBy.push(req.body.userIdentifier);
       if (hasOption) {
         // Add One Vote to the option
         poll.options[indexOption].votes++;

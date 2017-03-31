@@ -14,7 +14,7 @@ class PollCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.pollData.id,
+      id: this.props.pollData._id,
       chosen: this.props.pollData.options[0].name,
     };
     // Function Bindings
@@ -187,7 +187,12 @@ class PollCard extends Component {
           >
             <Button
               id={`vote-menu${this.state.id}`}
-              style={{ width: 130, fontSize: 13, fontWeight: 500, padding: '0 10px'}}
+              style={{
+                width: 130,
+                fontSize: 13,
+                fontWeight: 500,
+                padding: '0 10px',
+              }}
             >
               {chosen}
               <Icon

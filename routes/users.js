@@ -2,12 +2,12 @@ const express = require('express');
 const usersRouter = express.Router();
 const User = require('../models/users');
 
-// For Admin only
 usersRouter.get('/current', function(req, res, next) {
   if (req.isAuthenticated()) {
     res.json({
       isUserAuth: true,
-      username: req.user.username
+      username: req.user.username,
+      userID: req.user._id,
     });
   } else {
     res.json({

@@ -9,10 +9,7 @@ const path = require('path');
 /*
   Github
 */
-authRouter.get(
-  '/github',
-  passportGithub.authenticate('github') 
-);
+authRouter.get('/github', passportGithub.authenticate('github'));
 
 authRouter.get(
   '/github/callback',
@@ -23,7 +20,7 @@ authRouter.get(
       res.sendFile(popUpCloser);
     } else {
       res.json({
-        message: 'Not users found',
+        message: 'Not users found'
       });
     }
   }
@@ -43,7 +40,7 @@ authRouter.get(
       res.sendFile(popUpCloser);
     } else {
       res.json({
-        message: 'Not users found',
+        message: 'Not users found'
       });
     }
   }
@@ -63,7 +60,7 @@ authRouter.get(
       res.sendFile(popUpCloser);
     } else {
       res.json({
-        message: 'Not users found',
+        message: 'Not users found'
       });
     }
   }
@@ -72,7 +69,10 @@ authRouter.get(
 /*
   Google
 */
-authRouter.get('/google', passportGoogle.authenticate('google', { scope: ['profile'] }));
+authRouter.get(
+  '/google',
+  passportGoogle.authenticate('google', { scope: ['profile'] })
+);
 
 authRouter.get(
   '/google/callback',
@@ -83,7 +83,7 @@ authRouter.get(
       res.sendFile(popUpCloser);
     } else {
       res.json({
-        message: 'Not users found',
+        message: 'Not users found'
       });
     }
   }

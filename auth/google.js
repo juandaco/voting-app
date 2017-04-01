@@ -17,7 +17,7 @@ passport.use(
       };
 
       const updates = {
-        username: profile.displayName,
+        username: profile.name.givenName,
         name: profile.displayName,
         oauthService: 'Google',
         oauthServiceID: profile.id,

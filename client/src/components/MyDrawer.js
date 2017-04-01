@@ -18,7 +18,7 @@ const MyDrawer = (
       <Navigation>
 
         <div
-          style={username ? null : divPointer}
+          style={username ? {width: 208} : divPointer}
           onClick={username ? null : loginDialog}
         >
           <Icon name="account_circle" />

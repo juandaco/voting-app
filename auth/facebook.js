@@ -9,7 +9,13 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL
+      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+      profileFields: [
+        'id',
+        'name',
+        'displayName',
+        'email'
+      ]
     },
     function(accessToken, refreshToken, profile, done) {
       const searchQuery = {
@@ -17,10 +23,10 @@ passport.use(
       };
 
       const updates = {
-        username: profile.displayName,
+        username: profile.name.givenName,
         name: profile.displayName,
         oauthService: 'Facebook',
-        oauthServiceID: profile.id,
+        oauthServiceID: profile.id
       };
 
       const options = {

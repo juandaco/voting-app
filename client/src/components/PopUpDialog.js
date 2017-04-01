@@ -10,6 +10,20 @@ import {
 } from 'react-mdl';
 import dialogPolyfill from 'dialog-polyfill';
 
+// Loading Logos
+import twitterLogo from '../logos/twitterLogo.js';
+import facebookLogo from '../logos/facebookLogo.js';
+import githubLogo from '../logos/githubLogo.js';
+const googleLogo = iconStyle => {
+  return (
+    <img
+      src="/logos/google_plus_logo.svg"
+      style={iconStyle}
+      alt="Google+ Logo"
+    />
+  );
+};
+
 class PopUpDialog extends Component {
   constructor(props) {
     super(props);
@@ -70,6 +84,13 @@ class PopUpDialog extends Component {
     // For registering the dialogs
     const dialogs = document.querySelector('dialog');
     dialogs && dialogPolyfill.registerDialog(dialogs);
+
+    let iconStyle = {
+      width: 35,
+      height: 35,
+      marginTop: -7,
+      marginLeft: 10,
+    };
 
     let content;
     let buttons;
@@ -147,52 +168,16 @@ class PopUpDialog extends Component {
               value="github"
             >
               <Radio value="github">
-                <img
-                  src="./logos/github_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Github Logo"
-                />
+                {githubLogo(iconStyle)}
               </Radio>
               <Radio value="twitter">
-                <img
-                  src="./logos/twitter_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Twitter Logo"
-                />
+                {twitterLogo(iconStyle)}
               </Radio>
               <Radio value="google">
-                <img
-                  src="./logos/google_plus_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Google Plus Logo"
-                />
+                {googleLogo(iconStyle)}
               </Radio>
               <Radio value="facebook">
-                <img
-                  src="./logos/facebook_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Facebook Logo"
-                />
+                {facebookLogo(iconStyle)}
               </Radio>
             </RadioGroup>
           </div>
@@ -224,40 +209,13 @@ class PopUpDialog extends Component {
               value="twitter"
             >
               <Radio value="twitter">
-                <img
-                  src="./logos/twitter_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Twitter Logo"
-                />
+                {twitterLogo(iconStyle)}
               </Radio>
               <Radio value="google">
-                <img
-                  src="./logos/google_plus_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Google Plus Logo"
-                />
+                {googleLogo(iconStyle)}
               </Radio>
               <Radio value="facebook">
-                <img
-                  src="./logos/facebook_logo.svg"
-                  style={{
-                    width: 35,
-                    height: 35,
-                    marginTop: -7,
-                    marginLeft: 10,
-                  }}
-                  alt="Facebook Logo"
-                />
+                {facebookLogo(iconStyle)}
               </Radio>
             </RadioGroup>
           </div>

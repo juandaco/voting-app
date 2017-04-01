@@ -138,7 +138,7 @@ class PollCard extends Component {
         shadow={2}
         style={{
           width: 280,
-          height: 440,
+          height: 430,
           marginTop: 30,
           marginBottom: 20,
           marginLeft: 20,
@@ -161,20 +161,7 @@ class PollCard extends Component {
           pollTitle={this.props.pollData.pollTitle}
           chartData={chartData}
         />
-
-        <p
-          style={{
-            alignSelf: 'flex-end',
-            fontSize: 12,
-            height: 8,
-            marginTop: -20,
-            marginRight: 8,
-            color: 'rgb(189,189,189)',
-          }}
-        >
-          by {this.props.pollData.createdBy}
-        </p>
-
+        
         <CardActions border>
           <div
             style={{

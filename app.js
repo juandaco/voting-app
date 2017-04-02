@@ -17,9 +17,8 @@ const app = express();
 /*
   Connect to the Database
 */
-const mongoURI = 'mongodb://localhost:27017/voting';
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoURI);
+mongoose.connect(process.env.MONGO_URL);
 
 /*
   Configure Middleware

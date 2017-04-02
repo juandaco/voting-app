@@ -12,7 +12,7 @@ const facebookLogo = iconStyle => {
       width="266.893px"
       height="266.895px"
       viewBox="0 0 266.893 266.895"
-      enable-background="new 0 0 266.893 266.895"
+      enableBackground="new 0 0 266.893 266.895"
       xmlSpace="preserve"
     >
       <path

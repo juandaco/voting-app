@@ -1,8 +1,20 @@
 /* stylelint-disable selector-class-pattern */
+
 html,
 body {
   font-family: 'Roboto', 'Helvetica', sans-serif !important;
   // user-select: none;
+}
+
+iframe {
+  position: fixed;
+
+  overflow: auto;
+
+  width: 100%;
+  height: 100%;
+
+  border: none;
 }
 
 canvas {
@@ -33,4 +45,10 @@ dialog {
 
   width: 17px;
   height: 17px;
+}
+
+.mdl-card {
+  // Safari Content Disappearing Fix
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
 }

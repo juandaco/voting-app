@@ -1,5 +1,6 @@
 /* eslint-disable no-lone-blocks */
 
+// Dependencies
 import React, { Component } from 'react';
 import { Layout, Content, Icon, FABButton } from 'react-mdl';
 import fuzzysearch from 'fuzzysearch';
@@ -9,7 +10,10 @@ import MyHeader from './components/MyHeader';
 import MyDrawer from './components/MyDrawer';
 import PollCard from './components/PollCard';
 import PopUpDialog from './components/PopUpDialog';
+// Others
 import ApiCalls from './ApiCalls';
+import config from './config';
+
 
 class App extends Component {
   constructor() {
@@ -166,7 +170,7 @@ class App extends Component {
   showAllPolls(e) {
     // If User Clicked
     if (e) {
-      window.history.pushState({}, 'Voting App', 'http://localhost:3000');
+      window.history.pushState({}, 'Voting App', config.appURL);
       this.setState({ sharedPoll: '' });
     }
     this.setState({
@@ -191,25 +195,24 @@ class App extends Component {
     );
     let w;
     let h;
-    // const appURL = `http://localhost:3000/polls/${poll._id}`;
-    const appURL = 'http://www.freecodecamp.com';
+    const pollURL = `${config.appURL}/polls/${poll._id}`;
     let shareURL;
     if (shareService === 'facebook') {
       h = 276;
       w = 550;
-      shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(appURL)}`;
+      shareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pollURL)}`;
     } else if (shareService === 'twitter') {
       // Twitter Web Intent
       h = 276;
       w = 550;
       const tweetText = `Check out this cool Poll: "${poll.title}"`;
       const hashtags = ['FreeCodeCamp', 'VotingApp', 'Pollster'];
-      shareURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=${hashtags.join(',')}&url=${appURL}`;
+      shareURL = `https://twitter.com/intent/tweet?text=${tweetText}&hashtags=${hashtags.join(',')}&url=${pollURL}`;
     } else if (shareService === 'google') {
       // Google Plus share
       w = 400;
       h = 520;
-      shareURL = `https://plus.google.com/share?url=${appURL}`;
+      shareURL = `https://plus.google.com/share?url=${pollURL}`;
     }
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
@@ -250,7 +253,7 @@ class App extends Component {
   showUserDashboard(e) {
     // Verify if User Clicked
     if (e) {
-      window.history.pushState({}, 'Voting App', 'http://localhost:3000');
+      window.history.pushState({}, 'Voting App', config.appURL);
       this.setState({
         sharedPoll: '',
         userVisible: true,

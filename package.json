@@ -1,6 +1,7 @@
 {
-  "name": "voting-app",
+  "name": "pollster",
   "version": "0.1.0",
+  "description": "Voting App Back-End Project for FreeCodeCamp",
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",

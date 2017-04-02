@@ -74,9 +74,14 @@ class App extends Component {
     // Get PollID from the URL
     const pollID = window.location.pathname.slice(7);
     if (pollID) {
-      this.setState({
-        sharedPoll: pollID,
-      });
+      setTimeout(
+        () => {
+          this.setState({
+            sharedPoll: pollID,
+          });
+        },
+        500,
+      );
     }
   }
 
@@ -340,9 +345,12 @@ class App extends Component {
         });
         this.getUserPolls();
         // Bug Fix for React Chart.js not showing Canvas
-        setTimeout(() => {
-          this.showUserDashboard();
-        }, 300);
+        setTimeout(
+          () => {
+            this.showUserDashboard();
+          },
+          350,
+        );
       } else {
         this.setState({
           isUserAuth: false,
@@ -556,20 +564,22 @@ class App extends Component {
         let showDelete = this.state.userPolls.includes(poll._id);
         return (
           // The manual Delay fixes a bug in Chart.js
-          <Delay wait={150} key={poll._id}>
-            <PollCard
-              key={poll._id}
-              userVote={this.userVote}
-              userVoteDialog={this.userVoteDialog}
-              newOptionDialog={this.newOptionDialog}
-              confirmationDialog={this.confirmationDialog}
-              pollData={pollData}
-              visible={userVisible && searchVisible && sharedVisible}
-              showDelete={showDelete}
-              shareDialog={this.shareDialog}
-              deletePollDialog={this.deletePollDialog}
-            />
-          </Delay>
+          (
+            <Delay wait={300} key={poll._id}>
+              <PollCard
+                key={poll._id}
+                userVote={this.userVote}
+                userVoteDialog={this.userVoteDialog}
+                newOptionDialog={this.newOptionDialog}
+                confirmationDialog={this.confirmationDialog}
+                pollData={pollData}
+                visible={userVisible && searchVisible && sharedVisible}
+                showDelete={showDelete}
+                shareDialog={this.shareDialog}
+                deletePollDialog={this.deletePollDialog}
+              />
+            </Delay>
+          )
         );
       });
     } else {

@@ -4,7 +4,7 @@
   "description": "Voting App Back-End Project for FreeCodeCamp",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",

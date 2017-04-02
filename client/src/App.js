@@ -14,7 +14,6 @@ import PopUpDialog from './components/PopUpDialog';
 import ApiCalls from './ApiCalls';
 import config from './config';
 
-
 class App extends Component {
   constructor() {
     super();

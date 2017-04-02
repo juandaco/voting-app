@@ -1,5 +1,14 @@
 /* stylelint-disable selector-class-pattern */
 
+@font-face {
+  font-family: 'Sax Mono';
+
+  src: url(/fonts/saxmono.ttf);
+}
+
+// SCSS Variables
+$color-cream: #e2e2e2;
+
 html,
 body {
   font-family: 'Roboto', 'Helvetica', sans-serif !important;
@@ -48,7 +57,33 @@ dialog {
 }
 
 .mdl-card {
-  // Safari Content Disappearing Fix
-  transform: translate3d(0,0,0);
   -webkit-transform: translate3d(0,0,0);
+  // Safari Content Disappearing Fix
+          transform: translate3d(0,0,0);
+}
+
+#syntart-logo {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 1.5em;
+  font-weight: bolder;
+
+  display: inline-block;
+
+  margin-right: 10px;
+  margin-bottom: 13px;
+  margin-left: 11px;
+
+  -ms-transform: rotate(-13deg);
+      transform: rotate(-13deg);
+  letter-spacing: 2px;
+  // color: $color-cream;
+
+  outline: none;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), 2px 2px rgba(0, 0, 0, 0.2);
+
+  -webki: rotate(-13deg);
+}
+
+a:focus {
+  outline: none !important;
 }

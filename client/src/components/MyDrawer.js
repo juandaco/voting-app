@@ -14,7 +14,7 @@ const MyDrawer = (
 ) => {
   const divPointer = { cursor: 'pointer' };
   return (
-    <Drawer title="Pollster App">
+    <Drawer title="Pollster">
       <Navigation>
 
         <div

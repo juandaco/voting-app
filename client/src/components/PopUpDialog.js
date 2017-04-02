@@ -251,7 +251,83 @@ class PopUpDialog extends Component {
         break;
 
       case 'about':
-        content = <p>This Page was made by Syntart with for FreeCodeCamp</p>;
+        const fontAwesomeStyle = {
+          fontSize: 20,
+          marginLeft: 10,
+          marginRight: 10,
+        };
+        content = (
+          <div>
+            <p
+              style={{
+                textAlign: 'center',
+                fontSize: 18,
+                lineHeight: 2,
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 'bold',
+                }}
+              >
+                Pollster{' '}
+              </span>
+              was made by
+              <a href="https://www.freecodecamp.com/juandaco" target="_blank">
+                <span id="syntart-logo">
+                  Synt4rt
+                </span>
+              </a>
+              <br />
+              with
+              <i
+                className="fa fa-heart"
+                style={{
+                  fontSize: 20,
+                  marginLeft: 10,
+                }}
+                aria-hidden="true"
+              />
+              ,
+              <i
+                className="fa fa-music"
+                style={fontAwesomeStyle}
+                aria-hidden="true"
+              />
+              and
+              <i
+                className="fa fa-coffee"
+                style={fontAwesomeStyle}
+                aria-hidden="true"
+              />
+              for
+            </p>
+            {/*<br />*/}
+            <div
+              style={{
+                textAlign: 'center',
+                fontFamily: 'Sax Mono, monospace',
+                fontSize: '1.5em',
+                marginTop: 20,
+              }}
+            >
+              <a href="https://www.freecodecamp.com" target="_blank">
+                <span>
+                  freeCodeCamp
+                </span>
+                <i
+                  className="fa fa-free-code-camp"
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    marginLeft: 3,
+                  }}
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
+          </div>
+        );
         buttons = (
           <Button type="button" onClick={cancel}>
             OK

@@ -39,10 +39,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Allow Cross Origin Requests
-// const corsConfig = require('./corsConfig');
-// app.use(corsConfig);
-
 // Use Routes
 app.use('/auth', authRouter);
 app.use('/api/users', usersRouter);

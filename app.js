@@ -46,7 +46,7 @@ app.use('/api/polls', pollsRouter);
 /*
   Serve the Single Page App
 */
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

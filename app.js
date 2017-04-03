@@ -48,6 +48,11 @@ app.use('/api/polls', pollsRouter);
 */
 app.use(express.static('public'));
 
+// Catch any other address and serve index.html
+app.get('*', function(req, res) {
+  res.sendfile(__dirname + '/public/index.html');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error('Not Found');

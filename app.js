@@ -1,6 +1,5 @@
 require('dotenv').config();
 const path = require('path');
-const http = require('http');
 const express = require('express');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -22,7 +21,7 @@ const pollsRouter = require('./routes/polls');
   Initialize Express App
 */
 const app = express();
-const server = http.createServer(app);
+
 /*
   Connect to the Database
 */
@@ -80,6 +79,6 @@ app.use(function(err, req, res, next) {
 });
 
 const port = process.env.PORT || 3001;
-server.listen(port, function listening() {
+app.listen(port, function listening() {
   console.log('Listening on %d', port);
 });

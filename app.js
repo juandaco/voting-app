@@ -1,5 +1,6 @@
 require('dotenv').config();
 const path = require('path');
+const http = require('http');
 const express = require('express');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -21,7 +22,7 @@ const pollsRouter = require('./routes/polls');
   Initialize Express App
 */
 const app = express();
-
+const server = http.createServer(app);
 /*
   Connect to the Database
 */
@@ -56,7 +57,7 @@ app.use('/api/polls', pollsRouter);
   Serve the Single Page App in Production only
 */
 if (process.env.NODE_ENV === 'production') {
-  // app.use(favicon(path.join(__dirname, 'client/build', 'favicon.ico')));
+  app.use(favicon(path.join(__dirname, 'client/build', 'favicon.ico')));
   app.use(express.static('./client/build'));
 }
 
@@ -79,6 +80,6 @@ app.use(function(err, req, res, next) {
 });
 
 const port = process.env.PORT || 3001;
-app.listen(port, function listening() {
+server.listen(port, function listening() {
   console.log('Listening on %d', port);
 });

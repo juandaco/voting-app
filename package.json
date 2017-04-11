@@ -4,9 +4,12 @@
   "description": "Voting App Back-End Project for FreeCodeCamp",
   "private": true,
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently 'npm run server' 'npm run client' 'npm run scss-watch'",
     "client": "cd client && npm start",
-    "server": "nodemon ./bin/www"
+    "server": "nodemon app.js",
+    "scss-watch": "cd client/src && scss --watch index.scss:index.css",
+    "build": "cd client && npm run build",
+    "deploy": "npm run build && git add . && git commit -m 'Heroku Deployment' && git push origin master && git push heroku master && heroku open"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -23,6 +26,7 @@
     "passport-facebook": "^2.1.1",
     "passport-github2": "^0.1.10",
     "passport-google-oauth20": "^1.0.0",
-    "passport-twitter": "^1.0.4"
+    "passport-twitter": "^1.0.4",
+    "serve-favicon": "^2.4.2"
   }
 }

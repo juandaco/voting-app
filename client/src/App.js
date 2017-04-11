@@ -12,7 +12,7 @@ import PollCard from './components/PollCard';
 import PopUpDialog from './components/PopUpDialog';
 // Others
 import ApiCalls from './ApiCalls';
-import config from './config';
+import appURL from './config';
 
 class App extends Component {
   constructor() {
@@ -31,7 +31,7 @@ class App extends Component {
       userPolls: [],
       userVisible: false,
       sharedPoll: '',
-      pollData: [],
+      pollData: []
     };
 
     // Method Bindings
@@ -80,10 +80,10 @@ class App extends Component {
       setTimeout(
         () => {
           this.setState({
-            sharedPoll: pollID,
+            sharedPoll: pollID
           });
         },
-        500,
+        500
       );
     }
   }
@@ -94,7 +94,7 @@ class App extends Component {
   getPolls() {
     ApiCalls.getPolls().then(polls => {
       this.setState({
-        pollData: polls,
+        pollData: polls
       });
     });
   }
@@ -102,7 +102,7 @@ class App extends Component {
   getUserPolls() {
     ApiCalls.getUserPolls().then(resp => {
       this.setState({
-        userPolls: resp.polls,
+        userPolls: resp.polls
       });
     });
   }
@@ -123,7 +123,7 @@ class App extends Component {
       .map(option => {
         return {
           name: option.trim(),
-          votes: 0,
+          votes: 0
         };
       });
     const pollValidation = poll.title !== '' && poll.options.length >= 2;
@@ -139,7 +139,7 @@ class App extends Component {
           newUserPolls.push(poll._id);
           this.setState({
             pollData: newPollData,
-            userPolls: newUserPolls,
+            userPolls: newUserPolls
           });
           this.confirmationDialog('Poll Created');
         } else {
@@ -149,7 +149,7 @@ class App extends Component {
       });
     } else {
       this.confirmationDialog(
-        'The Poll needs a title and at least two options separated by lines',
+        'The Poll needs a title and at least two options separated by lines'
       );
     }
   }
@@ -169,11 +169,11 @@ class App extends Component {
   showAllPolls(e) {
     // If User Clicked
     if (e) {
-      window.history.pushState({}, 'Voting App', config.appURL);
+      window.history.pushState({}, 'Voting App', appURL);
       this.setState({ sharedPoll: '' });
     }
     this.setState({
-      userVisible: false,
+      userVisible: false
     });
     this.hideDrawer();
     this.scrollContentToTop();
@@ -190,11 +190,11 @@ class App extends Component {
       }
     });
     const poll = this.state.pollData.find(
-      poll => poll._id === this.state.currentPollID,
+      poll => poll._id === this.state.currentPollID
     );
     let w;
     let h;
-    const pollURL = `${config.appURL}/polls/${poll._id}`;
+    const pollURL = `${appURL}/polls/${poll._id}`;
     let shareURL;
     if (shareService === 'facebook') {
       h = 276;
@@ -224,7 +224,7 @@ class App extends Component {
       // Remove from pollData
       let newPollData = this.state.pollData.slice();
       const indexOfPoll = newPollData.findIndex(
-        poll => poll._id === deletedPoll._id,
+        poll => poll._id === deletedPoll._id
       );
       newPollData.splice(indexOfPoll, 1);
       // Remove from userPolls
@@ -236,7 +236,7 @@ class App extends Component {
       // New State
       this.setState({
         pollData: newPollData,
-        userPolls: newUserPolls,
+        userPolls: newUserPolls
       });
       // Update View
       if (this.state.userVisible) {
@@ -252,16 +252,16 @@ class App extends Component {
   showUserDashboard(e) {
     // Verify if User Clicked
     if (e) {
-      window.history.pushState({}, 'Voting App', config.appURL);
+      window.history.pushState({}, 'Voting App', appURL);
       this.setState({
         sharedPoll: '',
-        userVisible: true,
+        userVisible: true
       });
     }
     // Set User Visible only when not displaying a particular Poll
     if (!this.state.sharedPoll) {
       this.setState({
-        userVisible: true,
+        userVisible: true
       });
     }
     this.hideDrawer();
@@ -295,7 +295,10 @@ class App extends Component {
     const left = screen.width / 2 - w / 2;
     const top = screen.height / 2 - h / 2;
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
-    const authURL = `http://localhost:3001/auth/${loginService}`;
+    const address = process.env.NODE_ENV === 'development'
+      ? 'http://localhost:3001'
+      : appURL;
+    const authURL = `${address}/auth/${loginService}`;
     const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
     // For AutoClosing the popUp once we get an answer
     window.addEventListener(
@@ -307,7 +310,7 @@ class App extends Component {
           window.removeEventListener('message', function(e) {}, false);
         }
       },
-      false,
+      false
     );
   }
 
@@ -319,7 +322,7 @@ class App extends Component {
         userID: '',
         userPolls: [],
         pollFilter: [],
-        searchValue: '',
+        searchValue: ''
       });
       this.hideDrawer();
       this.confirmationDialog(resp.logoutMessage);
@@ -331,7 +334,7 @@ class App extends Component {
     // Get IP
     ApiCalls.getIP().then(resp => {
       this.setState({
-        userIP: resp.ip,
+        userIP: resp.ip
       });
     });
   }
@@ -343,7 +346,7 @@ class App extends Component {
         this.setState({
           isUserAuth: true,
           username: resp.username,
-          userID: resp.userID,
+          userID: resp.userID
         });
         this.getUserPolls();
         // Bug Fix for React Chart.js not showing Canvas
@@ -351,11 +354,11 @@ class App extends Component {
           () => {
             this.showUserDashboard();
           },
-          350,
+          350
         );
       } else {
         this.setState({
-          isUserAuth: false,
+          isUserAuth: false
         });
       }
     });
@@ -393,13 +396,13 @@ class App extends Component {
         .then(results => {
           // Modify the State when successful
           this.setState({
-            pollData: newData,
+            pollData: newData
           });
           this.userVoteDialog(chosen);
         })
         .catch(err => {
           this.confirmationDialog(
-            'There was an error with your vote, please try again',
+            'There was an error with your vote, please try again'
           );
         });
     } else {
@@ -412,21 +415,21 @@ class App extends Component {
   */
   showDialog() {
     this.setState({
-      openDialog: true,
+      openDialog: true
     });
   }
 
   hideDialog() {
     // this.getPolls();
     this.setState({
-      openDialog: false,
+      openDialog: false
     });
   }
 
   confirmationDialog(text) {
     this.setState({
       dialogType: 'confirm',
-      confirmationText: text,
+      confirmationText: text
     });
     this.showDialog();
   }
@@ -435,7 +438,7 @@ class App extends Component {
     if (this.state.isUserAuth) {
       this.setState({
         currentPollID: id,
-        dialogType: 'newOption',
+        dialogType: 'newOption'
       });
       this.showDialog();
     } else {
@@ -446,7 +449,7 @@ class App extends Component {
   pollDialog() {
     if (this.state.isUserAuth) {
       this.setState({
-        dialogType: 'poll',
+        dialogType: 'poll'
       });
       this.showDialog();
     } else {
@@ -460,7 +463,7 @@ class App extends Component {
 
   aboutDialog() {
     this.setState({
-      dialogType: 'about',
+      dialogType: 'about'
     });
     this.showDialog();
     this.hideDrawer();
@@ -469,7 +472,7 @@ class App extends Component {
   deletePollDialog(pollID) {
     this.setState({
       currentPollID: pollID,
-      dialogType: 'delete',
+      dialogType: 'delete'
     });
     this.showDialog();
   }
@@ -477,14 +480,14 @@ class App extends Component {
   shareDialog(pollID) {
     this.setState({
       currentPollID: pollID,
-      dialogType: 'share',
+      dialogType: 'share'
     });
     this.showDialog();
   }
 
   loginDialog() {
     this.setState({
-      dialogType: 'login',
+      dialogType: 'login'
     });
     this.showDialog();
   }
@@ -510,7 +513,7 @@ class App extends Component {
     let title;
     if (this.state.sharedPoll && this.state.pollData.length) {
       const poll = this.state.pollData.find(
-        poll => poll._id === this.state.sharedPoll,
+        poll => poll._id === this.state.sharedPoll
       );
       title = poll.title;
     } else {
@@ -525,7 +528,7 @@ class App extends Component {
   handleSearchChange(e) {
     const value = e.target.value;
     this.setState({
-      searchValue: value,
+      searchValue: value
     });
   }
 
@@ -548,7 +551,7 @@ class App extends Component {
           id: poll._id,
           pollTitle: poll.title,
           options: poll.options,
-          createdBy: poll.createdBy,
+          createdBy: poll.createdBy
         };
         let userVisible = true;
         userVisible = this.state.userVisible
@@ -558,7 +561,7 @@ class App extends Component {
         if (this.state.searchValue) {
           searchVisible = fuzzysearch(
             this.state.searchValue.toLowerCase(),
-            poll.title.toLowerCase(),
+            poll.title.toLowerCase()
           );
         }
         let sharedVisible = !this.state.sharedPoll;
@@ -616,7 +619,7 @@ class App extends Component {
               display: 'flex',
               flexDirection: 'row',
               flexWrap: 'wrap',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
           >
             {this.setUpPollCards()}
@@ -627,7 +630,7 @@ class App extends Component {
                       marginTop: 200,
                       lineHeight: 1.6,
                       textAlign: 'center',
-                      color: 'rgba(128, 128, 128, 0.64)',
+                      color: 'rgba(128, 128, 128, 0.64)'
                     }}
                   >
                     You don't have any polls!

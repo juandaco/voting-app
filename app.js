@@ -56,7 +56,7 @@ app.use('/api/polls', pollsRouter);
   Serve the Single Page App in Production only
 */
 if (process.env.NODE_ENV === 'production') {
-  app.use(favicon(path.join(__dirname, 'client/build', 'favicon.ico')));
+  // app.use(favicon(path.join(__dirname, 'client/build', 'favicon.ico')));
   app.use(express.static('./client/build'));
 }
 

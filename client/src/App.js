@@ -297,7 +297,7 @@ class App extends Component {
     const windowOptions = `width=${w}, height=${h}, top=${top}, left=${left}`;
     const address = process.env.NODE_ENV === 'development'
       ? 'http://localhost:3001'
-      : appURL;
+      : '';
     const authURL = `${address}/auth/${loginService}`;
     const oAuthPopUp = window.open(authURL, 'Github OAuth', windowOptions);
     // For AutoClosing the popUp once we get an answer
